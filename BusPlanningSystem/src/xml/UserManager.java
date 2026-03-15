@@ -52,6 +52,7 @@ public class UserManager
 		return new User(id, username, password, isAdmin);
 	}
 	
+	
 	public void addUser(String inUsername, String inPassword, boolean inIsAdmin) throws Exception
 	{
 		//Create the new user addition
@@ -82,6 +83,18 @@ public class UserManager
 			}
 		}
 		return false;
+	}
+	
+	public User getUser(int targetID)
+	{
+		for(User u : list)
+		{
+			if(u.getID() == targetID)
+			{
+				return u;
+			}
+		}
+		return null;
 	}
 	
 	public void printUserList()

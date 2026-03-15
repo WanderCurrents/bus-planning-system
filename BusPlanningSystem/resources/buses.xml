@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<buses>
+    <bus id="0">
+        <makemodel>Orion V</makemodel>
+        <type>City</type>
+        <fuelsize>150</fuelsize>
+        <fuelburn>7</fuelburn>
+        <cruisespeed>45</cruisespeed>
+    </bus>
+
+    <bus id="1">
+        <makemodel>MCI D4000 Coach</makemodel>
+        <type>Coach</type>
+        <fuelsize>164</fuelsize>
+        <fuelburn>12</fuelburn>
+        <cruisespeed>65</cruisespeed>
+    </bus>
+
+    <bus id="2">
+        <makemodel>Gillig Low Floor</makemodel>
+        <type>City</type>
+        <fuelsize>180</fuelsize>
+        <fuelburn>9</fuelburn>
+        <cruisespeed>50</cruisespeed>
+    </bus>
+</buses>
