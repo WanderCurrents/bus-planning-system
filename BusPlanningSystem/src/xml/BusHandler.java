@@ -12,7 +12,7 @@ public class BusHandler extends XMLHandler
 	
 	protected void addBusXML(int idIndex, String inMakeModel, String inType, int inFuelSize, int inFuelBurn, int inCruiseSpeed)
 	{
-		Element eNewBus = doc.createElement("user");
+		Element eNewBus = doc.createElement("bus");
 		eNewBus.setAttribute("id", String.valueOf(idIndex));
 		Element makemodel = doc.createElement("makemodel");
 		makemodel.setTextContent(inMakeModel);
