@@ -47,7 +47,7 @@ public class UserManager
 		int id = Integer.parseInt(e.getAttribute("id"));
 		String username = e.getElementsByTagName("username").item(0).getTextContent();
 		String password = e.getElementsByTagName("password").item(0).getTextContent();
-		boolean isAdmin = Boolean.parseBoolean(e.getElementsByTagName("isAdmin").item(0).getTextContent());
+		boolean isAdmin = Boolean.parseBoolean(e.getElementsByTagName("isAdmin").item(0).getTextContent());	//TODO: Make sure the cap case (isAdmin vs isadmin) is right
 		
 		return new User(id, username, password, isAdmin);
 	}
@@ -82,7 +82,7 @@ public class UserManager
 				return true;
 			}
 		}
-		return false;
+		return false;	//Not found
 	}
 	
 	public User getUser(int targetID)

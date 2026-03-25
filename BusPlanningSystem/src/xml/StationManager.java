@@ -1,6 +1,109 @@
 package xml;
 
+import model.Station;
+import model.User;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 public class StationManager 
 {
-
+	private StationHandler handler;
+	protected int idIndex;
+	protected List<Station> list = new ArrayList<>();
+	
+	public StationManager() throws Exception
+	{
+		handler = new StationHandler();
+		
+		//Establish the list
+		NodeList nodeBList = handler.doc.getElementsByTagName("station");
+		for(int i=0; i<nodeBList.getLength(); i++)
+		{
+			Element e = (Element) nodeBList.item(i);
+			list.add(convertElementToStation(e));
+		}
+		
+		idIndex = getIDIndex();
+	}
+	
+	protected int getIDIndex()
+	{
+		int maxID = -1;
+		//Loop through the XML file and find the highest ID
+		for(int i=0; i<list.size(); i++)
+		{
+			Station checkStation = list.get(i);
+			int listID = checkStation.getID();
+			if(listID > maxID)
+				maxID = listID;
+		}
+		return maxID+1;	//Returns the next available ID value that can be used
+	}
+	
+	private Station convertElementToStation(Element e)
+	{
+		int id = Integer.parseInt(e.getAttribute("id"));
+		String name = e.getElementsByTagName("name").item(0).getTextContent();
+		double latitude = Double.parseDouble(e.getElementsByTagName("latitude").item(0).getTextContent());
+		double longitude = Double.parseDouble(e.getElementsByTagName("longitude").item(0).getTextContent());
+		boolean isFuelOnly = Boolean.parseBoolean(e.getElementsByTagName("isfuelonly").item(0).getTextContent());
+		
+		return new Station(id, name, latitude, longitude, isFuelOnly);
+	}
+	
+	
+	public void addStation(String inName, double inLat, double inLong, boolean inIsFuelOnly) throws Exception
+	{
+		//Create the new station addition
+		Station newStation = new Station(idIndex, inName, inLat, inLong, inIsFuelOnly);
+		
+		//Deal with DOM stuff
+		handler.addStationXML(idIndex, inName, inLat, inLong, inIsFuelOnly);
+		
+		//Update the list
+		list.add(newStation);
+		
+		//Save changes to XML file
+		handler.saveXML();
+		
+		idIndex++;	//Update the index counter
+	}
+	
+	public boolean removeStation(int targetID) throws Exception
+	{
+		for(int i=0; i<list.size(); i++)
+		{
+			if(list.get(i).getID() == targetID)
+			{
+				list.remove(i);		//Remove from the working list
+				handler.removeStationXML(targetID);		//Remove from the XML DOM
+				handler.saveXML();	//Save XML to file
+				return true;
+			}
+		}
+		return false;	//Not found
+	}
+	
+	public Station getStation(int targetID)
+	{
+		for(Station s : list)
+		{
+			if(s.getID() == targetID)
+			{
+				return s;
+			}
+		}
+		return null;
+	}
+	
+	public void printStationList()
+	{
+		for(Station s : list)
+		{
+			System.out.println("ID: " + s.getID() + "\n\tName;  " + s.getName() + "\n\tLatitude: " + s.getLatitude() + "\n\tLongitude: " + s.getLongitude() + "\n\tIs Fuel Station: " + s.getIsFuelOnly());
+		}
+	}
 }

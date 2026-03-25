@@ -5,4 +5,9 @@
         <password>password</password>
         <isAdmin>true</isAdmin>
     </user>
+    <user id="1">
+        <username>testUser</username>
+        <password>verygoodpassword</password>
+        <isAdmin>true</isAdmin>
+    </user>
 </users>
