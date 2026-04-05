@@ -1,10 +1,12 @@
 package xml;
 
+import model.FuelType;
 import model.Station;
 import model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.EnumSet;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -49,19 +51,25 @@ public class StationManager
 		String name = e.getElementsByTagName("name").item(0).getTextContent();
 		double latitude = Double.parseDouble(e.getElementsByTagName("latitude").item(0).getTextContent());
 		double longitude = Double.parseDouble(e.getElementsByTagName("longitude").item(0).getTextContent());
+		String rawFuelTypes = e.getElementsByTagName("fueltypes").item(0).getTextContent().trim();
+		EnumSet<FuelType> supported = EnumSet.noneOf(FuelType.class);	//??
+		for (String token : rawFuelTypes.split(","))   //??
+		{
+			supported.add(FuelType.valueOf(token.trim()));
+		}
 		boolean isFuelOnly = Boolean.parseBoolean(e.getElementsByTagName("isfuelonly").item(0).getTextContent());
 		
-		return new Station(id, name, latitude, longitude, isFuelOnly);
+		return new Station(id, name, latitude, longitude, supported, isFuelOnly);
 	}
 	
 	
-	public void addStation(String inName, double inLat, double inLong, boolean inIsFuelOnly) throws Exception
+	public void addStation(String inName, double inLat, double inLong, EnumSet<FuelType> inFuelTypes, boolean inIsFuelOnly) throws Exception
 	{
 		//Create the new station addition
-		Station newStation = new Station(idIndex, inName, inLat, inLong, inIsFuelOnly);
+		Station newStation = new Station(idIndex, inName, inLat, inLong, inFuelTypes, inIsFuelOnly);
 		
 		//Deal with DOM stuff
-		handler.addStationXML(idIndex, inName, inLat, inLong, inIsFuelOnly);
+		handler.addStationXML(idIndex, inName, inLat, inLong, inFuelTypes, inIsFuelOnly);
 		
 		//Update the list
 		list.add(newStation);
@@ -103,7 +111,8 @@ public class StationManager
 	{
 		for(Station s : list)
 		{
-			System.out.println("ID: " + s.getID() + "\n\tName;  " + s.getName() + "\n\tLatitude: " + s.getLatitude() + "\n\tLongitude: " + s.getLongitude() + "\n\tIs Fuel Station: " + s.getIsFuelOnly());
+			System.out.println("ID: " + s.getID() + "\n\tName;  " + s.getName() + "\n\tLatitude: " + s.getLatitude() + "\n\tLongitude: " 
+					+ s.getLongitude() + "\n\tSupported Fuel Types :" + s.getSupportedFuelTypes() + "\n\tIs Fuel Station: " + s.getIsFuelOnly());
 		}
 	}
 }

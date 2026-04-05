@@ -2,6 +2,7 @@ package xml;
 
 import model.Bus;
 import model.User;
+import model.FuelType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,21 +49,22 @@ public class BusManager
 		int id = Integer.parseInt(e.getAttribute("id"));
 		String makeModel = e.getElementsByTagName("makemodel").item(0).getTextContent();
 		String type = e.getElementsByTagName("type").item(0).getTextContent();
+		FuelType fuelType = FuelType.parseFuelType(e.getElementsByTagName("fueltype").item(0).getTextContent());
 		int fuelSize = Integer.parseInt(e.getElementsByTagName("fuelsize").item(0).getTextContent());
 		int fuelBurn = Integer.parseInt(e.getElementsByTagName("fuelburn").item(0).getTextContent());
 		int cruiseSpeed = Integer.parseInt(e.getElementsByTagName("cruisespeed").item(0).getTextContent());
 		
-		return new Bus(id, makeModel, type, fuelSize, fuelBurn, cruiseSpeed);
+		return new Bus(id, makeModel, type, fuelType, fuelSize, fuelBurn, cruiseSpeed);
 	}
 	
 	
-	public void addBus(String inMakeModel, String inType, int inFuelSize, int inFuelBurn, int inCruiseSpeed) throws Exception
+	public void addBus(String inMakeModel, String inType, FuelType inFuelType, int inFuelSize, int inFuelBurn, int inCruiseSpeed) throws Exception
 	{
 		//Create the new bus addition
-		Bus newBus = new Bus(idIndex, inMakeModel, inType, inFuelSize, inFuelBurn, inCruiseSpeed);
+		Bus newBus = new Bus(idIndex, inMakeModel, inType, inFuelType, inFuelSize, inFuelBurn, inCruiseSpeed);
 		
 		//Deal with DOM stuff
-		handler.addBusXML(idIndex, inMakeModel, inType, inFuelSize, inFuelBurn, inCruiseSpeed);
+		handler.addBusXML(idIndex, inMakeModel, inType, inFuelType, inFuelSize, inFuelBurn, inCruiseSpeed);
 		
 		//Update the list
 		list.add(newBus);
@@ -105,7 +107,8 @@ public class BusManager
 		for(Bus b : list)
 		{
 			System.out.println("ID: " + b.getID() + "\n\tMake & Model: " + b.getMakeModel() + "\n\tType: " + b.getType() 
-					+ "\n\tFuel Size: " + b.getFuelSize() + "\n\tFuel Burn: " + b.getFuelBurn() + "\n\tCruise Speed: " + b.getCruiseSpeed());
+					+ "\n\tFuel Type: " + b.getFuelTypeDisplay() + "\n\tFuel Size: " + b.getFuelSize() 
+					+ "\n\tFuel Burn: " + b.getFuelBurn() + "\n\tCruise Speed: " + b.getCruiseSpeed());
 		}
 	}
 }

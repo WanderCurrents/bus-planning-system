@@ -3,6 +3,7 @@
     <bus id="0">
         <makemodel>Orion V</makemodel>
         <type>city</type>
+        <fueltype>GAS</fueltype>
         <fuelsize>150</fuelsize>
         <fuelburn>7</fuelburn>
         <cruisespeed>45</cruisespeed>
@@ -10,6 +11,7 @@
     <bus id="1">
         <makemodel>MCI D4000 Coach</makemodel>
         <type>long_distance</type>
+        <fueltype>DIESEL</fueltype>
         <fuelsize>164</fuelsize>
         <fuelburn>12</fuelburn>
         <cruisespeed>65</cruisespeed>
@@ -17,6 +19,7 @@
     <bus id="2">
         <makemodel>Gillig Low Floor</makemodel>
         <type>city</type>
+        <fueltype>GAS</fueltype>
         <fuelsize>180</fuelsize>
         <fuelburn>9</fuelburn>
         <cruisespeed>50</cruisespeed>

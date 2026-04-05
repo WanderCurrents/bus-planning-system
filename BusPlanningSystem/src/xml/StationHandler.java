@@ -1,5 +1,9 @@
 package xml;
 
+import model.FuelType;
+
+import java.util.EnumSet;
+import java.util.stream.Collectors;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -10,7 +14,7 @@ public class StationHandler extends XMLHandler
 		super("resources/stations.xml");
 	}
 	
-	protected void addStationXML(int idIndex, String inName, double inLat, double inLong, boolean inIsFuelOnly)
+	protected void addStationXML(int idIndex, String inName, double inLat, double inLong, EnumSet<FuelType> inFuelType, boolean inIsFuelOnly)
 	{
 		Element eNewStation = doc.createElement("station");
 		eNewStation.setAttribute("id", String.valueOf(idIndex));
@@ -20,6 +24,13 @@ public class StationHandler extends XMLHandler
 		latitude.setTextContent(String.valueOf(inLat));
 		Element longitude = doc.createElement("longitude");
 		longitude.setTextContent(String.valueOf(inLong));
+		Element fueltypes = doc.createElement("fueltypes");
+		String joinedFuelTypes = inFuelType
+									.stream()
+									.map(Enum::name)
+									.collect(Collectors.joining(","));
+		fueltypes.setTextContent(joinedFuelTypes);
+		
 		Element isFuelOnly = doc.createElement("isfuelonly");
 		isFuelOnly.setTextContent(String.valueOf(inIsFuelOnly));
 		
@@ -27,6 +38,7 @@ public class StationHandler extends XMLHandler
 		eNewStation.appendChild(name);
 		eNewStation.appendChild(latitude);
 		eNewStation.appendChild(longitude);
+		eNewStation.appendChild(fueltypes);
 		eNewStation.appendChild(isFuelOnly);
 		
 		//Add the element to the document

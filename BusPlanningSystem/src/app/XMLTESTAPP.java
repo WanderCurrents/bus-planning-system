@@ -3,7 +3,11 @@ package app;
 import xml.UserManager;
 import xml.StationManager;
 import xml.BusManager;
+
+import java.util.EnumSet;
 import java.util.Scanner;
+
+import model.FuelType;
 
 public class XMLTESTAPP {
 
@@ -94,13 +98,15 @@ public class XMLTESTAPP {
 						String makeModel = scanner.nextLine();
 						System.out.print("Enter the type (long_distance or city): ");		//need to enforce this
 						String type = scanner.nextLine();
+						System.out.print("Enter the fuel type (gas or diesel): ");
+						FuelType fuelType = FuelType.parseFuelType(scanner.nextLine());
 						System.out.print("Enter fuel tank size (gal): ");
 						int fuelSize = Integer.parseInt(scanner.nextLine());
 						System.out.print("Enter fuel burn rate (gal/hr): ");
 						int fuelBurn = Integer.parseInt(scanner.nextLine());
 						System.out.print("Enter cruise speed: ");
 						int cruiseSpeed = Integer.parseInt(scanner.nextLine());
-						busManager.addBus(makeModel, type, fuelSize, fuelBurn, cruiseSpeed);
+						busManager.addBus(makeModel, type, fuelType, fuelSize, fuelBurn, cruiseSpeed);
 					}
 					else if(selection == 2)
 					{
@@ -135,13 +141,24 @@ public class XMLTESTAPP {
 						double lat = Double.parseDouble(scanner.nextLine());
 						System.out.print("Enter the longitude: ");
 						double lon = Double.parseDouble(scanner.nextLine());
+						EnumSet<FuelType> supportedFuel = EnumSet.noneOf(FuelType.class);
+						System.out.print("Does this station support gas? (y/n)");
+						if(scanner.nextLine().toLowerCase().equals("y"))
+						{
+							supportedFuel.add(FuelType.GAS);
+						}
+						System.out.print("Does this station support diesel? (y/n)");
+						if(scanner.nextLine().toLowerCase().equals("y"))
+						{
+							supportedFuel.add(FuelType.DIESEL);
+						}
 						System.out.print("Enter 1 if refuel station (0 by default): ");
 						boolean isRefuel = false;
 						if(Integer.parseInt(scanner.nextLine()) == 1)
 						{
 							isRefuel = true;
 						}
-						stationManager.addStation(name, lat, lon, isRefuel);
+						stationManager.addStation(name, lat, lon, supportedFuel, isRefuel);
 					}
 					else if(selection == 2)
 					{
