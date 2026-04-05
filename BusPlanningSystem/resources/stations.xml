@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<stations>
+    <station id="0">
+        <name>Aiken Bus Stop</name>
+        <latitude>33.572490869244405</latitude>
+        <longitude>-81.7656840765117</longitude>
+        <fueltypes>GAS,DIESEL</fueltypes>
+        <isfuelonly>false</isfuelonly>
+    </station>
+    <station id="1">
+        <name>Augusta Bus Stop</name>
+        <latitude>33.477813813356946</latitude>
+        <longitude>-81.98879400439267</longitude>
+        <fueltypes>GAS,DIESEL</fueltypes>
+        <isfuelonly>false</isfuelonly>
+    </station>
+</stations>
