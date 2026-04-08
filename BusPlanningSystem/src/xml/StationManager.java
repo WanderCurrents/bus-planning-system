@@ -14,7 +14,7 @@ public class StationManager
 {
 	private StationHandler handler;
 	protected int idIndex;
-	protected List<Station> list = new ArrayList<>();
+	protected static List<Station> list = new ArrayList<>(); // Changed type to static ~Ilia
 	
 	public StationManager() throws Exception
 	{
@@ -31,7 +31,7 @@ public class StationManager
 		idIndex = getIDIndex();
 	}
 	
-	protected int getIDIndex()
+	public static int getIDIndex()
 	{
 		int maxID = -1;
 		//Loop through the XML file and find the highest ID
