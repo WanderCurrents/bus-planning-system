@@ -14,4 +14,32 @@
         <fueltypes>GAS,DIESEL</fueltypes>
         <isfuelonly>false</isfuelonly>
     </station>
+    <station id="2">
+        <name>Columbia Bus Stop</name>
+        <latitude>34.0007</latitude>
+        <longitude>-81.0348</longitude>
+        <fueltypes>GAS,DIESEL</fueltypes>
+        <isfuelonly>false</isfuelonly>
+    </station>
+    <station id="3">
+        <name>Charlotte Bus Stop</name>
+        <latitude>35.22773</latitude>
+        <longitude>-80.8447</longitude>
+        <fueltypes>GAS,DIESEL</fueltypes>
+        <isfuelonly>false</isfuelonly>
+    </station>
+    <station id="4">
+        <name>Atlanta Bus Stop</name>
+        <latitude>33.7490</latitude>
+        <longitude>-84.3902</longitude>
+        <fueltypes>GAS,DIESEL</fueltypes>
+        <isfuelonly>false</isfuelonly>
+    </station>
+    <station id="5">
+        <name>RefuelStation5</name>
+        <latitude>34.86328185428059</latitude>
+        <longitude>-80.90116283505803</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
 </stations>
