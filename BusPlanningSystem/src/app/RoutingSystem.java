@@ -10,11 +10,17 @@ import xml.StationManager;
 
 public class RoutingSystem 
 {
-	private ArrayList<Leg> travelPlan = new ArrayList<>();
-	private ArrayList<Station> refuelStationsInRange = new ArrayList<>();
-	private Station nextRefuelStation;
-	private Bus bus;
-	private double maxRange;
+	StationManager stationManager;											//Same StationManager created in App
+	private ArrayList<Leg> travelPlan = new ArrayList<>();					//The final list of legs
+	private ArrayList<Station> refuelStationsInRange = new ArrayList<>();	//Temporary list of stations that the bus can reach from current station
+	private Station nextRefuelStation;										//A variable that ends up holding the chosen next station temporarily
+	private Bus bus;														//Bus that we're routing
+	
+	public RoutingSystem(Bus bus, StationManager stationManager)	//Main constructor for Routing System
+	{																//Requires bus and StationManager parameters
+		this.bus = bus;
+		this.stationManager = stationManager;	//Dependency injection for the Station Manager, only one exists still
+	}
 	
 	public ArrayList<Leg> getTravelPlan() 
 	{
@@ -26,20 +32,6 @@ public class RoutingSystem
 		return refuelStationsInRange;
 	}
 	
-	public Bus getBus()
-	{
-		return bus;
-	}
-	
-	public void setMaxRange(double fuelCapacity, double gallons, double speed) 
-	{
-		this.maxRange = (fuelCapacity/gallons) * speed;
-	}
-	
-	public double getMaxRange()
-	{
-		return maxRange;
-	}
 	
 	
 	public static double calcDist(double longitude1, double latitude1, double longitude2, double latitude2) 
@@ -55,9 +47,7 @@ public class RoutingSystem
 
 		double distance = Math.sqrt(x*x + y*y);
 		return distance;
-
 	}
-	
 	public static double calcHeading(double longitude1, double latitude1, double longitude2, double latitude2) 
 	{		
 		double differenceLon = longitude2 - longitude1;
@@ -81,36 +71,7 @@ public class RoutingSystem
 	    	headingDegrees = 360-theta;
 	    
 	    return headingDegrees;
-	    
 	}
-	
-	public Station refuelStation(Station currentStation, Station endStation) throws Exception 
-	{
-		
-			System.out.println("Travel plan is impossible due to lack of refueling facilities. Inserting refuel station.");
-			
-			int rStationID = StationManager.getIDIndex();
-			String rStationName = ("RefuelStation" + Integer.toString(rStationID));
-			
-			double distFromCurrentToEnd = calcDist(currentStation.getLongitude(), currentStation.getLatitude(), endStation.getLongitude(), endStation.getLatitude());
-			
-			double calcPortionOfRoute = (maxRange/distFromCurrentToEnd); //this is out of 1
-			
-			//calculate coordinates for the location
-			double rLongitude = (currentStation.getLongitude() + calcPortionOfRoute * (endStation.getLongitude()-currentStation.getLongitude()));
-			double rLatitude = (currentStation.getLatitude() + calcPortionOfRoute * (endStation.getLatitude() - currentStation.getLatitude()));
-			
-			EnumSet<FuelType> supported = EnumSet.of(bus.getFuelType());
-			boolean isFuelOnly = true;
-			
-			Station newRefuelStation = new Station(rStationID, rStationName, rLongitude, rLatitude, supported, isFuelOnly);
-			
-			StationManager stationManager = new StationManager(); //create an instance
-			stationManager.addStation(rStationName, rLatitude, rLongitude, supported, isFuelOnly); //why can we not do StationManager.add(...)?
-			
-			return newRefuelStation;
-	}
-	
 	public static double calcTime(Station startStation, Station endStation, double cruiseSpeed)
 	{
 		double distance = calcDist(startStation.getLongitude(), startStation.getLatitude(), endStation.getLongitude(), endStation.getLatitude());
@@ -120,10 +81,48 @@ public class RoutingSystem
 		return time;
 	}
 	
-	public void planRoute(Station startStation, Station endStation) throws Exception 
+	
+	public Station insertRefuelStation(Station currentStation, Station endStation) throws Exception 
 	{
-		travelPlan = new ArrayList<>(); //travel plan for this 
-		Station currentStation = startStation;
+		
+			System.out.println("Travel plan is impossible due to lack of refueling facilities. Inserting refuel station to plan.");
+			
+			int rStationID = stationManager.getIDIndex();	//Asks the manager for the next available ID for naming and object creation
+			String rStationName = ("RefuelStation" + Integer.toString(rStationID));
+			
+			//Calculate how far along the route the station should be
+			double distFromCurrentToEnd = calcDist(currentStation.getLongitude(), currentStation.getLatitude(), endStation.getLongitude(), endStation.getLatitude());
+			double calcPortionOfRoute = (bus.getMaxRange() / distFromCurrentToEnd); //this is out of 1
+			
+			//Calculate coordinates for the location
+			double rLongitude = (currentStation.getLongitude() + calcPortionOfRoute * (endStation.getLongitude() - currentStation.getLongitude()));
+			double rLatitude = (currentStation.getLatitude() + calcPortionOfRoute * (endStation.getLatitude() - currentStation.getLatitude()));
+			
+			EnumSet<FuelType> supported = EnumSet.of(bus.getFuelType());
+			boolean isFuelOnly = true;
+			
+			//Create the station object
+			Station newRefuelStation = new Station(rStationID, rStationName, rLongitude, rLatitude, supported, isFuelOnly);
+
+			//Add it to the SAME manager that the App created, this saves it permanently
+			stationManager.addStation(rStationName, rLatitude, rLongitude, supported, isFuelOnly); //why can we not do StationManager.add(...)?
+			
+			return newRefuelStation;
+	}
+	
+	public void planRoute(ArrayList<Station> stops) throws Exception
+	{
+		travelPlan = new ArrayList<>();
+		
+		for(int i = 0; i < stops.size() - 1; i++)
+		{
+			planLeg(stops.get(i), stops.get(i+1));
+		}
+	}
+	//A single-leg solver
+	public void planLeg(Station startStation, Station endStation) throws Exception 
+	{
+		Station currentStation = startStation;	//Sets the starting point at the starting station
 		
 		while(!currentStation.equals(endStation))
 		{
@@ -131,7 +130,7 @@ public class RoutingSystem
 			
 			Station nextStation;
 			
-			if(maxRange >= distCurrentToEnd) //if it is possible then just add it to the travel plan
+			if(bus.getMaxRange() >= distCurrentToEnd) //If it is possible then just add it to the travel plan
 			{
 				//double heading = calcHeading(currentStation.getLongitude(), currentStation.getLatitude(), nextStation.getLongitude(), nextStation.getLatitude());
 				//double time = calcTime(currentStation, nextStation, bus.getCruiseSpeed());
@@ -141,32 +140,33 @@ public class RoutingSystem
 				
 				nextStation = endStation;
 			}
-			else //look for possible stations in range
+			else //First, look for possible stations in range
 			{
 				refuelStationsInRange = new ArrayList<>();
 				
-				for(Station stationInRange: StationManager.list) 
+				//Create a list of stations in range
+				for(Station s : stationManager.getStationList())  //Look through s objects in the entire list of stations looking for stations in range
 				{
-					if(!stationInRange.equals(currentStation)) //makes sure it is not the current station
+					if(!s.equals(currentStation)) //Makes sure the station element looked at isn't the starting station
 					{
-						double distToRefuelStation = calcDist(currentStation.getLongitude(), currentStation.getLatitude(), stationInRange.getLongitude(), stationInRange.getLatitude());
+						double distToRefuelStation = calcDist(currentStation.getLongitude(), currentStation.getLatitude(), s.getLongitude(), s.getLatitude());
 						
-						//check for anyStation in range that supports that fuelType
-						if(distToRefuelStation < maxRange && stationInRange.supports(bus.getFuelType()))
+						//Check for any Station in range and supports that fuelType
+						if(distToRefuelStation < bus.getMaxRange() && s.supports(bus.getFuelType()))
 						{
-							refuelStationsInRange.add(stationInRange); //if it does add it to rStationInRange
+							refuelStationsInRange.add(s); //If it does add it to rStationInRange
 						}
 					}
-				
 				}
-				//check if list is empty
+				//Check if list is empty, meaning no stations in range
 				if(refuelStationsInRange.isEmpty())
 				{
-					nextStation = refuelStation(currentStation, endStation);
+					nextStation = insertRefuelStation(currentStation, endStation);	//Add a refuel station
 				}
+				//If stations found in range, pick the best one
 				else 
 				{
-					//check which rStation is best
+					//Check which rStation is best
 					nextStation = refuelStationsInRange.get(0); //saves the station with the min distance (aka best distance)
 					
 					//get distance from the nextStation to endStation
@@ -188,12 +188,14 @@ public class RoutingSystem
 					}
 				}
 			}
+			
+			//Build the leg
 			double legDistance = calcDist(currentStation.getLongitude(), currentStation.getLatitude(), nextStation.getLongitude(), nextStation.getLatitude());
 			double heading = calcHeading(currentStation.getLongitude(), currentStation.getLatitude(), nextStation.getLongitude(), nextStation.getLatitude());
 			double time = calcTime(currentStation, nextStation, bus.getCruiseSpeed() );
 			Leg leg = new Leg(currentStation, nextStation, legDistance, heading, time);
 			travelPlan.add(leg);
-			currentStation = nextStation;
+			currentStation = nextStation;	//Move to the next station
 		}		
 		
 	}

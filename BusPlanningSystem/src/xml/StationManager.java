@@ -14,7 +14,7 @@ public class StationManager
 {
 	private StationHandler handler;
 	protected int idIndex;
-	protected static List<Station> list = new ArrayList<>(); // Changed type to static ~Ilia
+	protected List<Station> list = new ArrayList<>();
 	
 	public StationManager() throws Exception
 	{
@@ -31,7 +31,7 @@ public class StationManager
 		idIndex = getIDIndex();
 	}
 	
-	public static int getIDIndex()
+	public int getIDIndex()
 	{
 		int maxID = -1;
 		//Loop through the XML file and find the highest ID
@@ -52,8 +52,8 @@ public class StationManager
 		double latitude = Double.parseDouble(e.getElementsByTagName("latitude").item(0).getTextContent());
 		double longitude = Double.parseDouble(e.getElementsByTagName("longitude").item(0).getTextContent());
 		String rawFuelTypes = e.getElementsByTagName("fueltypes").item(0).getTextContent().trim();
-		EnumSet<FuelType> supported = EnumSet.noneOf(FuelType.class);	//??
-		for (String token : rawFuelTypes.split(","))   //??
+		EnumSet<FuelType> supported = EnumSet.noneOf(FuelType.class);
+		for (String token : rawFuelTypes.split(","))
 		{
 			supported.add(FuelType.valueOf(token.trim()));
 		}
@@ -105,6 +105,11 @@ public class StationManager
 			}
 		}
 		return null;
+	}
+	
+	public List<Station> getStationList()
+	{
+		return list;
 	}
 	
 	public void printStationList()

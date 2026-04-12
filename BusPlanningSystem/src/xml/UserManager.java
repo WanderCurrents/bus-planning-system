@@ -11,7 +11,7 @@ public class UserManager
 {
 	private UserHandler handler;
 	protected int idIndex;
-	protected List<User> list = new ArrayList<>();	//May need to be public idk
+	protected List<User> list = new ArrayList<>();
 	
 	public UserManager() throws Exception
 	{
