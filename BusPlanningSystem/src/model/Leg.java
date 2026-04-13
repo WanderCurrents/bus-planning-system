@@ -1,6 +1,5 @@
 package model;
 
-import model.Geo;
 
 public class Leg 
 {

@@ -50,27 +50,5 @@ public class Geo
 		double time = (distance/bus.getCruiseSpeed());
 		
 		return time;
-	}
-	
-	//Dont understand this code, can someone figure this out. It may work?
-	public static double[] movePoint(double lat, double lon, double headingDegrees, double distanceMiles) {
-	    double R = 3958.8; // Earth radius in miles
+	}}
 
-	    double latRad = Math.toRadians(lat);
-	    double lonRad = Math.toRadians(lon);
-	    double headingRad = Math.toRadians(headingDegrees);
-
-	    double newLatRad = Math.asin(
-	        Math.sin(latRad) * Math.cos(distanceMiles / R) +
-	        Math.cos(latRad) * Math.sin(distanceMiles / R) * Math.cos(headingRad)
-	    );
-
-	    double newLonRad = lonRad + Math.atan2(
-	        Math.sin(headingRad) * Math.sin(distanceMiles / R) * Math.cos(latRad),
-	        Math.cos(distanceMiles / R) - Math.sin(latRad) * Math.sin(newLatRad)
-	    );
-
-	    return new double[] { Math.toDegrees(newLatRad), Math.toDegrees(newLonRad) };
-	}
-	
-}
