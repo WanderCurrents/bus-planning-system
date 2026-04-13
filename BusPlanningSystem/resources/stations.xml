@@ -37,15 +37,36 @@
     </station>
     <station id="5">
         <name>RefuelStation5</name>
-        <latitude>33.575184869016134</latitude>
-        <longitude>-82.85103348551479</longitude>
+        <latitude>34.10888877156467</latitude>
+        <longitude>-83.52730708541617</longitude>
         <fueltypes>GAS</fueltypes>
         <isfuelonly>true</isfuelonly>
     </station>
     <station id="6">
         <name>RefuelStation6</name>
-        <latitude>33.6726099950362</latitude>
-        <longitude>-83.7137517701128</longitude>
+        <latitude>34.46939808019036</latitude>
+        <longitude>-82.66292633048973</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
+    <station id="7">
+        <name>RefuelStation7</name>
+        <latitude>34.830533712238335</latitude>
+        <longitude>-81.7970438614615</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
+    <station id="8">
+        <name>RefuelStation8</name>
+        <latitude>35.192301515190714</latitude>
+        <longitude>-80.92964565802501</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
+    <station id="9">
+        <name>RefuelStation9</name>
+        <latitude>33.58492197458206</latitude>
+        <longitude>-82.93725743362701</longitude>
         <fueltypes>GAS</fueltypes>
         <isfuelonly>true</isfuelonly>
     </station>

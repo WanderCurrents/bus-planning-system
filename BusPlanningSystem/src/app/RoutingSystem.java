@@ -15,7 +15,7 @@ public class RoutingSystem
 	StationManager stationManager;											//Same StationManager created in App
 	private ArrayList<Leg> travelPlan = new ArrayList<>();					//The final list of legs
 	private ArrayList<Station> refuelStationsInRange = new ArrayList<>();	//Temporary list of stations that the bus can reach from current station
-	private Station nextRefuelStation;										//A variable that ends up holding the chosen next station temporarily
+//	private Station nextRefuelStation;										//A variable that ends up holding the chosen next station temporarily DEPRECATED?
 	private Bus bus;														//Bus that we're routing
 	
 	public RoutingSystem(Bus bus, StationManager stationManager)	//Main constructor for Routing System
@@ -199,7 +199,7 @@ public class RoutingSystem
 			
 			//Calculate how far along the route the station should be
 			double distFromCurrentToEnd = Geo.calcDist(currentStation.getLatitude(), currentStation.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
-			double calcPortionOfRoute = ((bus.getMaxRange()-10) / distFromCurrentToEnd); //this is out of 1
+			double calcPortionOfRoute = ((bus.getMaxRange()-5) / distFromCurrentToEnd); //this is out of 1
 			//Prevent tiny movements
 			if(calcPortionOfRoute < 0.05)
 			{
