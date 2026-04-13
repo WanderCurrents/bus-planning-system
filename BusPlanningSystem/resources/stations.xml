@@ -42,4 +42,11 @@
         <fueltypes>GAS</fueltypes>
         <isfuelonly>true</isfuelonly>
     </station>
+    <station id="6">
+        <name>RefuelStation6</name>
+        <latitude>34.86328185428059</latitude>
+        <longitude>-80.90116283505803</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
 </stations>
