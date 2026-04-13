@@ -49,40 +49,66 @@ public class RoutingSystem
 	//A single-leg solver
 	private void planLeg(Station startStation, Station endStation) throws Exception 
 	{
+		System.out.println("Entering plan leg method");
+		System.out.println("startStation: " + startStation.getName() + " endStation: " + endStation.getName());
+		
 		Station currentStation = startStation;
+		Station next;
 		
 		while(!currentStation.equals(endStation))
 		{
+			System.out.println("-----------------------------------------");
+			System.out.println("currentStation: " + currentStation.getName() + " endStation: " + endStation.getName());
 			double distToEnd = Geo.calcDist(currentStation.getLatitude(), currentStation.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
 			
+			System.out.println("PHASE 1: Can it reach directly?");
 			//Phase 1: If we can reach the destination directly, go there
 			if(canReachDestination(distToEnd))
 			{
 				addLeg(currentStation, endStation);
 				currentStation = endStation;
+				
+				System.out.println("PHASE 1: It can!");
+				System.out.println("currentStation after PHASE 1: " + currentStation.getName());
+				
 				continue;
-			}
-			
-			//Phase 2: If not, find any stations in range AND that are closer than current station (don't go backwards)
-			ArrayList<Station> candidates = findStationsInRangeCloserThanCurrent(currentStation, endStation);
-			Station next;
-			if(candidates.isEmpty())
-			{
-				//Phase 2.1: No suitable candidate stops -> insert a refuel station
-				next = insertRefuelStation(currentStation, endStation);
 			}
 			else
 			{
-				//Phase 2.2: Suitable candidates found -> find the best one
-				next = pickClosestStationToEnd(candidates, endStation);
+				System.out.println("PHASE 1: It cannot, go to phase 2");
+				//Phase 2: If not, find any stations in range AND that are closer than current station (don't go backwards)
+				System.out.println("currentStation before search: " + currentStation.getName());
+				ArrayList<Station> candidates = findStationsInRangeCloserThanCurrent(currentStation, endStation);
+				
+				System.out.println("PHASE 2: Need to find stations");
+				if(candidates.isEmpty())
+				{
+					System.out.println("No candidates found, inserting fuel station");
+					//Phase 2.1: No suitable candidate stops -> insert a refuel station
+					next = insertRefuelStation(currentStation, endStation);
+
+					System.out.println("currentStation after PHASE 2: " + currentStation.getName());
+					System.out.println("next after PHASE 2: " + next.getName());
+				}
+				else
+				{
+					System.out.println("Cadidates found, setting next");
+					//Phase 2.2: Suitable candidates found -> find the best one
+					next = pickClosestStationToEnd(candidates, endStation);
+					System.out.println("currentStation after PHASE 2: " + currentStation.getName());
+					System.out.println("next after PHASE 2: " + next.getName());
+				}
+				
+				//Phase 3: Safety check, make sure we actually made progress
+				double newDist = Geo.calcDist(next.getLatitude(), next.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
+				System.out.println("next latitude: " + next.getLatitude()  + " next longitude: " + next.getLongitude());
+				System.out.println("NEW DIST " + newDist + " OLD DIST: " + distToEnd);
+				if(newDist >= distToEnd)
+				{
+					throw new Exception("Routing failed: next station attempted does not reduce distance.");
+				}
 			}
 			
-			//Phase 3: Safety check, make sure we actually made progress
-			double newDist = Geo.calcDist(next.getLatitude(), next.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
-			if(newDist >= distToEnd)
-			{
-				throw new Exception("Routing failed: next station attempted does not reduce distance.");
-			}
 			
 			//Phase 4: Add the leg to the travel plan
 			addLeg(currentStation, next);
@@ -97,30 +123,45 @@ public class RoutingSystem
 	}
 	private ArrayList<Station> findStationsInRangeCloserThanCurrent(Station current, Station end)
 	{
+		System.out.println("ENTERING SEARCH METHOD");
 		ArrayList<Station> list = new ArrayList<>();
 		
 		double distCurrentToEnd = Geo.calcDist(current.getLatitude(), current.getLongitude(), end.getLatitude(), end.getLongitude());
+		System.out.println("distCurrentToEnd: " + distCurrentToEnd);
+		System.out.println("-----------------------------");
 		for(Station s : stationManager.getStationList())
 		{
+
+			System.out.println(" ");
+			System.out.println("Candidate: " + s.getName());
 			if(s.equals(current))
 			{
+				System.out.println("REJECTED: SAME AS CURRENT");
 				continue;	//If the station element is the current one, skip
 			}
 			
 			double distToS = Geo.calcDist(current.getLatitude(), current.getLongitude(), s.getLatitude(), s.getLongitude());	//Distance from start to station element
+			System.out.println("distToS: " + distToS);
 			if(distToS > bus.getMaxRange())
 			{
+				System.out.println("REJECTED: distToS is larger than or max range");
 				continue;	//If the station element is too far away, skip
 			}
 			if(!s.supports(bus.getFuelType()))
 			{
+				System.out.println("REJECTED: Not correct FUELTYPE");
 				continue;	//If the station element doesn't support fuel type for bus, skip
 			}
 			
 			double distSToEnd = Geo.calcDist(s.getLatitude(), s.getLongitude(), end.getLatitude(), end.getLongitude());	//Distance from station element to target
+			System.out.println("distSToEnd: " + distSToEnd);
 			if(distSToEnd < distCurrentToEnd)
 			{
+				System.out.println("ADDED!");
 				list.add(s);	//If going to this station element means we will be closer to the target than being at the current station, add it to the list
+			}
+			else {
+				System.out.println("REJECTED: distance to S is equal to or farther than dist of current to end");
 			}
 		}
 		
@@ -158,7 +199,7 @@ public class RoutingSystem
 			
 			//Calculate how far along the route the station should be
 			double distFromCurrentToEnd = Geo.calcDist(currentStation.getLatitude(), currentStation.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
-			double calcPortionOfRoute = (bus.getMaxRange() / distFromCurrentToEnd); //this is out of 1
+			double calcPortionOfRoute = ((bus.getMaxRange()-10) / distFromCurrentToEnd); //this is out of 1
 			//Prevent tiny movements
 			if(calcPortionOfRoute < 0.05)
 			{
@@ -179,7 +220,7 @@ public class RoutingSystem
 			boolean isFuelOnly = true;
 			
 			//Create the station object
-			Station newRefuelStation = new Station(rStationID, rStationName, rLongitude, rLatitude, supported, isFuelOnly);
+			Station newRefuelStation = new Station(rStationID, rStationName, rLatitude, rLongitude, supported, isFuelOnly);
 
 			//Add it to the SAME manager that the App created, this saves it permanently
 			stationManager.addStation(rStationName, rLatitude, rLongitude, supported, isFuelOnly); //why can we not do StationManager.add(...)?
