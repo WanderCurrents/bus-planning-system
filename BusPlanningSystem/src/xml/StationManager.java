@@ -121,16 +121,16 @@ public class StationManager
 		}
 	}
 	//SubString Search
-//	public List<Station> subStringSearch(String substring)
-//	{
-//		List<Station> matches = new ArrayList<>();
-//		String lower = substring.toLowerCase();
-//		for (Station s : list)
-//		{
-//			if (s.getName().toLowerCase().contains(lower))
-//				matches.add(s);
-//		}
-//		return matches;
-//	}
-//	}
+	public List<Station> subStringSearch(String substring)
+	{
+		List<Station> matches = new ArrayList<>();
+		String lower = substring.toLowerCase();
+		for (Station s : list)
+		{
+			if (s.getName().toLowerCase().contains(lower))
+				matches.add(s);
+		}
+		return matches;
+	}
+	
 }

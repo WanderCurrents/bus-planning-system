@@ -1,7 +1,7 @@
 package model;
 
-
-public class Leg 
+import model.Geo;
+public class Leg
 {
 	private Station startStation; 
 	private Station endStation;
