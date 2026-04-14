@@ -6,6 +6,7 @@ import xml.BusManager;
 import model.User;
 import model.Bus;
 import model.Station;
+import model.Leg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,8 +177,50 @@ public class App {
 		{
 			return false;
 		}
+		ArrayList<Station> stops = selectDestinations(sm, startStation, scanner);	//Start the destination selection area
+		if(stops == null)
+		{
+			return false;
+		}
+		stops.add(0, startStation);	//Adding the starting station to the beginning of the stops
 		
-		System.out.println("DEBUG: " + selectedBus.getMakeModel() + startStation.getName());
+		//Start doing the routing system stuff
+		try 
+		{
+			rs.planRoute(stops);
+		} catch(Exception e) 
+		{
+			System.out.println("ERROR: Calling plan route method, operation failed! :'(");
+			e.printStackTrace();
+			System.out.print("\n\n\n\nPress ENTER to continue...");
+			scanner.nextLine();
+			return false;
+		}
+		//Now that the routing system ran the plan route method, the travel plan should be updated
+		ArrayList<Leg> travelPlan = rs.getTravelPlan();
+		
+		
+		//DEBUG
+//
+//		System.out.println("DEBUG selected bus: " + selectedBus.getMakeModel());
+//		System.out.println("DEBUG selected start: " + startStation.getName());
+//		System.out.println("DEBUG destination: ");
+//		for(Station s : stops)
+//		{
+//			System.out.println("Dest: " + s.getName());
+//		}
+//		System.out.println("DEBUG Legs:");
+//		for(Leg l : travelPlan)
+//		{
+//			System.out.println("Start: " + l.getStartStation().getName() + "\tEnd: " + l.getEndStation().getName());
+//		}
+//		System.out.print("\n\n\n\nPress ENTER to continue...");
+//		scanner.nextLine();
+		////
+		
+		DisplayManager.printTravelPlan(selectedBus, travelPlan, scanner);
+		System.out.print("\n\n\n\nPress ENTER to continue...");
+		scanner.nextLine();
 		return false;	//Exit loop
 	}
 	public static Bus selectBus(BusManager bm, Scanner scanner)
@@ -302,7 +345,7 @@ public class App {
 					//Note, the index in the list is 1 off the printed option number, make sure to remember that
 					//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 4 decimal points for lat and long
 					System.out.printf(
-						    "**%d\t- %s  -  Lat: %.4f  -  Long: %.4f",
+						    "**%d\t- %s  -  Lat: %.4f  -  Long: %.4f%n",
 						    i + 1,
 						    results.get(i).getName(),
 						    results.get(i).getLatitude(),
@@ -311,7 +354,7 @@ public class App {
 
 				}
 				
-				//Get the user's bus selection
+				//Get the user's station selection
 				selectionLoop = true;
 				DisplayManager.printFooter();
 				do
@@ -324,11 +367,11 @@ public class App {
 						userSelection = Integer.parseInt(input);
 						if(!(userSelection>0 && userSelection<=results.size()))
 						{
-							System.out.println("Not a valid bus option! Please try again...");
+							System.out.println("Not a valid station option! Please try again...");
 						}
 						else
 						{
-							selectedStart = results.get(userSelection-1);	//Set the bus selection, -1 for index consideration
+							selectedStart = results.get(userSelection-1);	//Set the station selection, -1 for index consideration
 							selectionLoop = false;	//Exit this loop
 						}
 					} catch(Exception e) {
@@ -339,85 +382,110 @@ public class App {
 		} while(selectionLoop);
 		return selectedStart;
 	}
-	public static List<Station> selectDestinations(StationManager sm, Scanner scanner)
+	public static ArrayList<Station> selectDestinations(StationManager sm, Station startStation, Scanner scanner)
 	{
 		String input;
 		int userSelection;
 		boolean selectionLoop = true;
-		Station selectedStart = null;
+		ArrayList<Station> selectedDestinations = new ArrayList<>();
 		
 		//Main select station loop
 		do
 		{
-			DisplayManager.clearScreen();
-			DisplayManager.printHeader("Plan Route > Bus Selection > Start Station > Destination Station(s)");
-			System.out.println();
-			System.out.print("Search for destination station (enter name of city): ");
-			input = scanner.nextLine();
-			
-			//Search for buses
-			System.out.println("\nSearching for stations that match \"" + input + "\"...");
-			List<Station> results = sm.subStringSearch(input);
-			
-			//Print the results
-			if(results.isEmpty())	//If the search is bad, state it's empty
+			boolean moreStations = true;
+			//This loop allows for multiple destination stations
+			do
 			{
-				System.out.println("\nNo stations found!");
-				System.out.print("\n\nWould you like to try again? [Y/n] ");
-				if(scanner.nextLine().toLowerCase().equals("n"))
+				DisplayManager.clearScreen();
+				DisplayManager.printHeader("Plan Route > Bus Selection > Start Station > Destination Station(s)");
+				System.out.println("Current starting station: " + startStation.getName());
+				if(!selectedDestinations.isEmpty())
 				{
-					selectionLoop = false;	//Exit loop, return to main menu
-					continue;
-				}
-				else
-				{
-					continue;	//Just pass through this iteration and redo outerloop
-				}
-			}
-			else	//If search isn't bad, continue
-			{
-				System.out.println("\nFound " + results.size() + " results:");
-				for(int i = 0; i < results.size(); i++)
-				{
-					//Note, the index in the list is 1 off the printed option number, make sure to remember that
-					//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 4 decimal points for lat and long
-					System.out.printf(
-						    "**%d\t- %s  -  Lat: %.4f  -  Long: %.4f",
-						    i + 1,
-						    results.get(i).getName(),
-						    results.get(i).getLatitude(),
-						    results.get(i).getLongitude()
-						);
-
-				}
-				
-				//Get the user's bus selection
-				selectionLoop = true;
-				DisplayManager.printFooter();
-				do
-				{
-					System.out.print("Select start station option (1-" + results.size() + "): ");
-					input = scanner.nextLine();
-					//Attempt to turn input into int
-					try
+					System.out.print("Current destinations: ");
+					for(Station s : selectedDestinations)
 					{
-						userSelection = Integer.parseInt(input);
-						if(!(userSelection>0 && userSelection<=results.size()))
-						{
-							System.out.println("Not a valid bus option! Please try again...");
-						}
-						else
-						{
-							selectedStart = results.get(userSelection-1);	//Set the bus selection, -1 for index consideration
-							selectionLoop = false;	//Exit this loop
-						}
-					} catch(Exception e) {
-						System.out.println("\n\nERROR: Processing input. Please only input integers. Please try again...");
+						System.out.print(s.getName() + " > ");
 					}
-				} while(selectionLoop);
-			}
+					System.out.print("[currently selecting]");
+				}
+				else 
+				{
+					System.out.println("Current destinations: none yet!");
+				}
+				System.out.println("\n");
+				
+				
+				System.out.print("Search for destination station (enter name of city): ");
+				input = scanner.nextLine();
+				
+				//Search for buses
+				System.out.println("\nSearching for stations that match \"" + input + "\"...");
+				List<Station> results = sm.subStringSearch(input);
+				
+				//Print the results
+				if(results.isEmpty())	//If the search is bad, state it's empty
+				{
+					System.out.println("\nNo stations found!");
+					System.out.print("\n\nWould you like to try again? (n=quit) [Y/n] ");
+					if(scanner.nextLine().toLowerCase().equals("n"))
+					{
+						return null;
+					}
+					else
+					{
+						continue;	//Just pass through this iteration and redo outerloop
+					}
+				}
+				else	//If search isn't bad, continue
+				{
+					System.out.println("\nFound " + results.size() + " results:");
+					for(int i = 0; i < results.size(); i++)
+					{
+						//Note, the index in the list is 1 off the printed option number, make sure to remember that
+						//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 4 decimal points for lat and long
+						System.out.printf(
+							    "**%d\t- %s  -  Lat: %.4f  -  Long: %.4f%n",
+							    i + 1,
+							    results.get(i).getName(),
+							    results.get(i).getLatitude(),
+							    results.get(i).getLongitude()
+							);
+	
+					}
+				
+					//Get the user's station selection
+					selectionLoop = true;
+					DisplayManager.printFooter();
+					do
+					{
+						System.out.print("Select start station option (1-" + results.size() + "): ");
+						input = scanner.nextLine();
+						//Attempt to turn input into int
+						try
+						{
+							userSelection = Integer.parseInt(input);
+							if(!(userSelection>0 && userSelection<=results.size()))
+							{
+								System.out.println("Not a valid station option! Please try again...");
+							}
+							else
+							{
+								selectedDestinations.add(results.get(userSelection-1));	//Set the bus selection, -1 for index consideration
+								selectionLoop = false;	//Exit this inner loop
+							}
+						} catch(Exception e) {
+							System.out.println("\n\nERROR: Processing input. Please only input integers. Please try again...");
+						}
+					} while(selectionLoop);
+					System.out.print("Would you like to add another station destination? [Y/n] ");
+					if(scanner.nextLine().toLowerCase().equals("n"))
+					{
+						moreStations = false;
+					}
+				} 
+			} while(moreStations);
 		} while(selectionLoop);
-		return selectedStart;
+		return selectedDestinations;
 	}
 	
 	//This is the adding user process, could be run by the main method upon login or in admin menu

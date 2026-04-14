@@ -1,6 +1,11 @@
 package app;
 
+import model.Bus;
+import model.Leg;
+
+import java.util.ArrayList;
 import java.util.Scanner;
+
 
 public class DisplayManager 
 {
@@ -32,6 +37,23 @@ public class DisplayManager
 		}
 	}
 	
+	//Method for printing a header for a screen, if there is an input passed in then a special header is printed
+		public static void printHeader(String headerInput)
+		{
+			System.out.println("================================================================");
+			System.out.println(" " + headerInput);
+			System.out.println("----------------------------------------------------------------\n\n");
+		}
+		public static void printHeader()
+		{
+			System.out.println("================================================================\n\n");
+		}
+		
+		public static void printFooter()
+		{
+			System.out.println("----------------------------------------------------------------");
+		}
+	
 	public static void printSplash(Scanner scanner)
 	{
 		
@@ -45,20 +67,33 @@ public class DisplayManager
 		scanner.nextLine();
 	}
 	
-	//Method for printing a header for a screen, if there is an input passed in then a special header is printed
-	public static void printHeader(String headerInput)
+
+	public static void printTravelPlan(Bus bus, ArrayList<Leg> travelPlan, Scanner scanner) 
 	{
-		System.out.println("================================================================");
-		System.out.println(" " + headerInput);
-		System.out.println("----------------------------------------------------------------\n\n");
-	}
-	public static void printHeader()
-	{
-		System.out.println("================================================================\n\n");
-	}
-	
-	public static void printFooter()
-	{
-		System.out.println("----------------------------------------------------------------");
+		clearScreen();
+		printHeader("Plan Route Results");
+
+		double totalTravelTime = 0;
+		double totalDistance = 0;
+		System.out.println("Travel Plan:");
+		System.out.print("(start) " + travelPlan.get(0).getStartStation().getName());
+		for(Leg l : travelPlan)
+		{
+			totalTravelTime += l.getTime();
+			totalDistance += l.getDist();
+			System.out.printf(" >>>(%smiles)>>> ",		//Part that is going to be the blueprint for formatted data for distance
+				    String.format("%.2f", l.getDist()).replaceAll("\\.?0+$", "")	//Distance is formatted to only have 2 digits of precision when necessary
+				);
+			System.out.print(l.getEndStation().getName());
+			
+		}
+		System.out.print(" (end)\n\n");
+		
+		int travelTimeHrs = (int) totalTravelTime;	//Figuring out the hours
+		int travelTimeMin = (int) Math.round((totalTravelTime - travelTimeHrs) * 60);	//Figuring out the remaining minutes
+		
+		System.out.printf("Total Travel Time: %d hours %d minutes%n", travelTimeHrs, travelTimeMin);	//Print the total time
+		System.out.printf("Total Distance: %.3f miles%n", totalDistance);
+		
 	}
 }
