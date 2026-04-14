@@ -12,6 +12,7 @@ public class UserManager
 	private UserHandler handler;
 	protected int idIndex;
 	protected List<User> list = new ArrayList<>();
+	private User currentUser;
 	
 	public UserManager() throws Exception
 	{
@@ -85,6 +86,20 @@ public class UserManager
 		return false;	//Not found
 	}
 	
+	//Returns the userID for a user based on username, only returns if exact match is found for security
+	public int findUser(String username)
+	{
+		for(User u : list)
+		{
+			if(u.getUsername().equals(username))
+			{
+				return u.getID();
+			}
+		}
+		return -99;	//Just a number to signal user not found
+	}
+	
+	//Returns u
 	public User getUser(int targetID)
 	{
 		for(User u : list)
@@ -97,6 +112,18 @@ public class UserManager
 		return null;
 	}
 	
+	//Sets the current user of the program, used during login process
+	public void setCurrentUser(int userID)
+	{
+		currentUser = getUser(userID);
+	}
+	//Returns boolean value reflecting if the current user is of Admin status
+	public boolean isCurrentUserAdmin()
+	{
+		return currentUser.getIsAdmin();
+	}
+	
+	//Prints out a list of users, mainly for debug purposes
 	public void printUserList()
 	{
 		for(User u : list)
