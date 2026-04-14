@@ -40,7 +40,7 @@ public class DisplayManager
 		System.out.println("****************************************************************");
 		System.out.println("                           WARNING!                            ");
 		System.out.println("****************************************************************");
-		System.out.println("\n\n  THIS SOFTWARE IS NOT TO BE USED FOR ROUTE PLANNING PURPOSES");
+		System.out.println("\n\n\n\n\n  THIS SOFTWARE IS NOT TO BE USED FOR ROUTE PLANNING PURPOSES\n\n");
 		System.out.print("\n\n\n\nPress ENTER to continue...");
 		scanner.nextLine();
 	}
@@ -55,5 +55,10 @@ public class DisplayManager
 	public static void printHeader()
 	{
 		System.out.println("================================================================\n\n");
+	}
+	
+	public static void printFooter()
+	{
+		System.out.println("----------------------------------------------------------------");
 	}
 }

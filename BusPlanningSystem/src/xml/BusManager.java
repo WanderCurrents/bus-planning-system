@@ -3,6 +3,7 @@ package xml;
 import model.Bus;
 import model.User;
 import model.FuelType;
+import model.Station;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,5 +111,18 @@ public class BusManager
 					+ "\n\tFuel Type: " + b.getFuelTypeDisplay() + "\n\tFuel Size: " + b.getFuelSize() 
 					+ "\n\tFuel Burn: " + b.getFuelBurn() + "\n\tCruise Speed: " + b.getCruiseSpeed());
 		}
+	}
+	
+	//SubString Search
+	public List<Bus> subStringSearch(String substring)
+	{
+		List<Bus> matches = new ArrayList<>();
+		String lower = substring.toLowerCase();
+		for (Bus b : list)
+		{
+			if (b.getMakeModel().toLowerCase().contains(lower))
+				matches.add(b);
+		}
+		return matches;
 	}
 }

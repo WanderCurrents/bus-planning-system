@@ -8,11 +8,6 @@
     <user id="1">
         <username>testUser</username>
         <password>verygoodpassword</password>
-        <isAdmin>true</isAdmin>
-    </user>
-    <user id="3">
-        <username>testcreation</username>
-        <password>god</password>
         <isAdmin>false</isAdmin>
     </user>
 </users>

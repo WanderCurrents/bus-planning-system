@@ -120,15 +120,17 @@ public class StationManager
 					+ s.getLongitude() + "\n\tSupported Fuel Types :" + s.getSupportedFuelTypes() + "\n\tIs Fuel Station: " + s.getIsFuelOnly());
 		}
 	}
-	//SubString Search
+	//SubString Search for regular stations only
 	public List<Station> subStringSearch(String substring)
 	{
 		List<Station> matches = new ArrayList<>();
 		String lower = substring.toLowerCase();
 		for (Station s : list)
 		{
-			if (s.getName().toLowerCase().contains(lower))
+			if (s.getName().toLowerCase().contains(lower) && s.getIsFuelOnly() == false)
+			{
 				matches.add(s);
+			}
 		}
 		return matches;
 	}

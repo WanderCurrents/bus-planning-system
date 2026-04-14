@@ -120,7 +120,19 @@ public class UserManager
 	//Returns boolean value reflecting if the current user is of Admin status
 	public boolean isCurrentUserAdmin()
 	{
-		return currentUser.getIsAdmin();
+		if(currentUser == null)	//Cases where the currentUser isnt set, like upon first login
+		{
+			return false;	//Defaults to non-Admin
+		}
+		else
+		{
+			return currentUser.getIsAdmin();	//Otherwise return the admin status of currentUser
+		}
+	}
+	//Returns the current user's username
+	public String getCurrentUsername()
+	{
+		return currentUser.getUsername();
 	}
 	
 	//Prints out a list of users, mainly for debug purposes
