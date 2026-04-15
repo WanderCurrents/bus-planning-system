@@ -7,6 +7,7 @@ import model.User;
 import model.Bus;
 import model.Station;
 import model.Leg;
+import utility.InputHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,17 +72,13 @@ public class App {
 		int userID = um.findUser(username);
 		if(userID == -99)	//If no user found
 		{
-			System.out.println("User not found! Would you like to create a user?");
-			System.out.print("[Y/n]: ");
-			String userIn = scanner.nextLine();
-			if(userIn.toLowerCase().equals("y"))
+			if(InputHelper.getYesNo(scanner, "User not found! Would you like to create a user?"))
 			{
 				addUserProcess(um, scanner);	//Make a new user
-				
 			}
 			else
 			{
-				System.out.println("\nPlease try again.");
+				System.out.println("\nLogin failed, username incorrect. Please try again.");
 			}
 		}
 		else
@@ -102,7 +99,7 @@ public class App {
 			}
 		}
 		
-		System.out.print("\n\n\n\nPress ENTER to continue...");
+		System.out.print("\nPress ENTER to continue...");
 		scanner.nextLine();
 		return false;
 	}
@@ -114,25 +111,13 @@ public class App {
 		int userSelection;
 		DisplayManager.clearScreen();
 		DisplayManager.printHeader("Main Menu  -  Welcome " + um.getCurrentUsername() + "!");
-		System.out.println();
 		System.out.println("1. Plan route");
 		System.out.println("2. View buses/stations");
 		System.out.println("3. Admin menu");
 		System.out.println("4. More info");
-		System.out.println("\n\n0. Exit program");
-		System.out.print("\n\nEnter selection (0-4): ");
+		System.out.println("\n\n0. Exit program\n\n\n");
 	
-		input = scanner.nextLine();	//Take input from user
-		
-		try
-		{
-			userSelection = Integer.parseInt(input);
-		} catch(Exception e) {
-			System.out.println("\n\nERROR: Processing input. Please only input integers. Please try again.");
-			System.out.print("\n\n\n\nPress ENTER to continue...");
-			scanner.nextLine();
-			return true;
-		}
+		userSelection = InputHelper.getIntInRange(scanner, 0, 4);
 		
 		switch(userSelection)
 		{
@@ -192,7 +177,7 @@ public class App {
 		{
 			System.out.println("ERROR: Calling plan route method, operation failed! :'(");
 			e.printStackTrace();
-			System.out.print("\n\n\n\nPress ENTER to continue...");
+			System.out.print("\n\nPress ENTER to continue...");
 			scanner.nextLine();
 			return false;
 		}
@@ -219,19 +204,20 @@ public class App {
 		////
 		
 		DisplayManager.printTravelPlan(selectedBus, travelPlan, scanner);
-		System.out.print("\n\n\n\nPress ENTER to continue...");
+		System.out.print("\n\nPress ENTER to continue...");
 		scanner.nextLine();
 		return false;	//Exit loop
 	}
 	public static Bus selectBus(BusManager bm, Scanner scanner)
 	{
 		String input;
+		boolean boolInput;
 		int userSelection;
-		boolean selectionLoop = true;
+		boolean searching = true;
 		Bus selectedBus = null;
 		
 		//Main select bus loop
-		do
+		while(searching)
 		{
 			DisplayManager.clearScreen();
 			DisplayManager.printHeader("Plan Route > Bus Selection");
@@ -247,8 +233,8 @@ public class App {
 			if(results.isEmpty())	//If the search is bad, state it's empty
 			{
 				System.out.println("\nNo buses found!");
-				System.out.print("\n\nWould you like to try again (n=quit)? [Y/n] ");
-				if(scanner.nextLine().toLowerCase().equals("n"))
+				boolInput = InputHelper.getYesNo(scanner, "\n\nWould you like to try again (or n=quit)?");
+				if(!boolInput)
 				{
 					return null;
 				}
@@ -276,50 +262,35 @@ public class App {
 				}
 				
 				//Get the user's bus selection
-				selectionLoop = true;
+				
 				DisplayManager.printFooter();
-				do
-				{
-					System.out.print("Select bus option (1-" + results.size() + "): ");
-					input = scanner.nextLine();
-					//Attempt to turn input into int
-					try
-					{
-						userSelection = Integer.parseInt(input);
-						if(!(userSelection>0 && userSelection<=results.size()))
-						{
-							System.out.println("Not a valid bus option! Please try again...");
-						}
-						else
-						{
-							selectedBus = results.get(userSelection-1);	//Set the bus selection, -1 for index consideration
-							selectionLoop = false;	//Exit this loop
-						}
-					} catch(Exception e) {
-						System.out.println("\n\nERROR: Processing input. Please only input integers. Please try again...");
-					}
-				} while(selectionLoop);
+				
+				System.out.print("Select bus option (1-" + results.size() + "): ");
+				userSelection = InputHelper.getIntInRange(scanner, 1, results.size());
+				
+				
+				selectedBus = results.get(userSelection-1);	//Set the bus selection, -1 for index consideration
+				searching = false;	//Exit the outer loop
 			}
-		} while(selectionLoop);
+		}
 		return selectedBus;
 	}
-	public static Station selectStartStation(StationManager sm, Scanner scanner)
+	public static Station selectSingleStation(StationManager sm, Scanner scanner)
 	{
 		String input;
+		boolean boolInput;
 		int userSelection;
-		boolean selectionLoop = true;
-		Station selectedStart = null;
+		Station selectedStation = null;
 		
 		//Main select station loop
-		do
+		boolean searching = true;
+		while(searching)
 		{
-			DisplayManager.clearScreen();
-			DisplayManager.printHeader("Plan Route > Bus Selection > Start Station");
 			System.out.println();
-			System.out.print("Search for starting station (enter name of city): ");
+			System.out.print("Search for station (enter name of city): ");
 			input = scanner.nextLine();
 			
-			//Search for buses
+			//Search for stations
 			System.out.println("\nSearching for stations that match \"" + input + "\"...");
 			List<Station> results = sm.subStringSearch(input);
 			
@@ -327,8 +298,8 @@ public class App {
 			if(results.isEmpty())	//If the search is bad, state it's empty
 			{
 				System.out.println("\nNo stations found!");
-				System.out.print("\n\nWould you like to try again (n=quit)? [Y/n] ");
-				if(scanner.nextLine().toLowerCase().equals("n"))
+				boolInput = InputHelper.getYesNo(scanner, "\n\nWould you like to try again (or n=quit)?");
+				if(!boolInput)
 				{
 					return null;
 				}
@@ -355,136 +326,82 @@ public class App {
 				}
 				
 				//Get the user's station selection
-				selectionLoop = true;
 				DisplayManager.printFooter();
-				do
-				{
-					System.out.print("Select start station option (1-" + results.size() + "): ");
-					input = scanner.nextLine();
-					//Attempt to turn input into int
-					try
-					{
-						userSelection = Integer.parseInt(input);
-						if(!(userSelection>0 && userSelection<=results.size()))
-						{
-							System.out.println("Not a valid station option! Please try again...");
-						}
-						else
-						{
-							selectedStart = results.get(userSelection-1);	//Set the station selection, -1 for index consideration
-							selectionLoop = false;	//Exit this loop
-						}
-					} catch(Exception e) {
-						System.out.println("\n\nERROR: Processing input. Please only input integers. Please try again...");
-					}
-				} while(selectionLoop);
+				
+				userSelection = InputHelper.getIntInRange(scanner, 1, results.size());
+				
+				selectedStation = results.get(userSelection-1);	//Set the station selection, -1 for index consideration
+				searching = false;	//Exit the outer loop
 			}
-		} while(selectionLoop);
+		}
+		return selectedStation;
+	}
+	
+	public static Station selectStartStation(StationManager sm, Scanner scanner)
+	{
+		Station selectedStart = null;
+		
+		DisplayManager.clearScreen();
+		DisplayManager.printHeader("Plan Route > Bus Selection > Start Station");
+		selectedStart = selectSingleStation(sm, scanner);
+		
 		return selectedStart;
 	}
 	public static ArrayList<Station> selectDestinations(StationManager sm, Station startStation, Scanner scanner)
 	{
 		String input;
 		int userSelection;
-		boolean selectionLoop = true;
 		ArrayList<Station> selectedDestinations = new ArrayList<>();
 		
-		//Main select station loop
-		do
+		//This allows for multiple destination stations to be selected by user
+		boolean moreStations = true;
+		while(moreStations)
 		{
-			boolean moreStations = true;
-			//This loop allows for multiple destination stations
-			do
+			DisplayManager.clearScreen();
+			DisplayManager.printHeader("Plan Route > Bus Selection > Start Station > Destination Station(s)");
+			System.out.println("Current starting station: " + startStation.getName());
+			//This allows for the current destination stations to be displayed, possible that none are so there is a case for this
+			if(!selectedDestinations.isEmpty())
 			{
-				DisplayManager.clearScreen();
-				DisplayManager.printHeader("Plan Route > Bus Selection > Start Station > Destination Station(s)");
-				System.out.println("Current starting station: " + startStation.getName());
-				if(!selectedDestinations.isEmpty())
+				System.out.print("Current destinations: ");
+				for(Station s : selectedDestinations)
 				{
-					System.out.print("Current destinations: ");
-					for(Station s : selectedDestinations)
-					{
-						System.out.print(s.getName() + " > ");
-					}
-					System.out.print("[currently selecting]");
+					System.out.print(s.getName() + " > ");
 				}
-				else 
-				{
-					System.out.println("Current destinations: none yet!");
-				}
-				System.out.println("\n");
+				System.out.print("[currently selecting]");
+			}
+			else 
+			{
+				System.out.println("Current destinations: none yet!");
+			}
+			System.out.println("\n");
+			
+			//Add station to the list
+			Station nextStation = selectSingleStation(sm, scanner);
+			if(nextStation == null)	//If returned null, it means user quit inside this method...
+			{
+				return null;	//...so quit
+			}
+			
+			selectedDestinations.add(selectSingleStation(sm, scanner));
+			
+			//This is the logic that allows the user to break out of this loop
+			while (true) 
+			{
+				boolean boolInput = InputHelper.getYesNo(scanner, "Would you like to add another station destination? [Y/n] ");
 				
-				
-				System.out.print("Search for destination station (enter name of city): ");
-				input = scanner.nextLine();
-				
-				//Search for buses
-				System.out.println("\nSearching for stations that match \"" + input + "\"...");
-				List<Station> results = sm.subStringSearch(input);
-				
-				//Print the results
-				if(results.isEmpty())	//If the search is bad, state it's empty
-				{
-					System.out.println("\nNo stations found!");
-					System.out.print("\n\nWould you like to try again? (n=quit) [Y/n] ");
-					if(scanner.nextLine().toLowerCase().equals("n"))
-					{
-						return null;
-					}
-					else
-					{
-						continue;	//Just pass through this iteration and redo outerloop
-					}
-				}
-				else	//If search isn't bad, continue
-				{
-					System.out.println("\nFound " + results.size() + " results:");
-					for(int i = 0; i < results.size(); i++)
-					{
-						//Note, the index in the list is 1 off the printed option number, make sure to remember that
-						//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 4 decimal points for lat and long
-						System.out.printf(
-							    "**%d\t- %s  -  Lat: %.4f  -  Long: %.4f%n",
-							    i + 1,
-							    results.get(i).getName(),
-							    results.get(i).getLatitude(),
-							    results.get(i).getLongitude()
-							);
-	
-					}
-				
-					//Get the user's station selection
-					selectionLoop = true;
-					DisplayManager.printFooter();
-					do
-					{
-						System.out.print("Select start station option (1-" + results.size() + "): ");
-						input = scanner.nextLine();
-						//Attempt to turn input into int
-						try
-						{
-							userSelection = Integer.parseInt(input);
-							if(!(userSelection>0 && userSelection<=results.size()))
-							{
-								System.out.println("Not a valid station option! Please try again...");
-							}
-							else
-							{
-								selectedDestinations.add(results.get(userSelection-1));	//Set the bus selection, -1 for index consideration
-								selectionLoop = false;	//Exit this inner loop
-							}
-						} catch(Exception e) {
-							System.out.println("\n\nERROR: Processing input. Please only input integers. Please try again...");
-						}
-					} while(selectionLoop);
-					System.out.print("Would you like to add another station destination? [Y/n] ");
-					if(scanner.nextLine().toLowerCase().equals("n"))
-					{
-						moreStations = false;
-					}
-				} 
-			} while(moreStations);
-		} while(selectionLoop);
+			    if (boolInput) 
+			    {
+			        moreStations = true;
+			        break;
+			    }
+			    if (!boolInput) 
+			    {
+			        moreStations = false;
+			        break;
+			    }
+			}
+		}
 		return selectedDestinations;
 	}
 	
@@ -501,8 +418,7 @@ public class App {
 		
 		if(um.isCurrentUserAdmin() == true)
 		{
-			System.out.print("Is the new user an Admin? [Y/n] ");
-			if(scanner.nextLine().toLowerCase().equals("y"))
+			if(InputHelper.getYesNo(scanner, "Is the new user an Admin? [Y/n] "))
 			{
 				newAdmin = true;
 			}
@@ -516,6 +432,8 @@ public class App {
 		} catch (Exception e) {
 			System.out.println("ERROR: Creating new user, operation failed! :(");
 			e.printStackTrace();
+			System.out.print("\n\n\nPress ENTER to continue...");
+			scanner.nextLine();
 		}
 	}
 }
