@@ -1,5 +1,6 @@
 package xml;
 
+import model.Station;
 import model.User;
 
 import java.util.ArrayList;
@@ -144,4 +145,17 @@ public class UserManager
 		}
 	}
 	
+	//SubString Search for users, using exact username, case-sensitive
+		public List<User> subStringSearch(String substring)
+		{
+			List<User> matches = new ArrayList<>();
+			for (User u : list)
+			{
+				if(u.getUsername().equals(substring))
+				{
+					matches.add(u);
+				}
+			}
+			return matches;
+		}
 }
