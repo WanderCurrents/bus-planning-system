@@ -38,21 +38,21 @@ public class DisplayManager
 	}
 	
 	//Method for printing a header for a screen, if there is an input passed in then a special header is printed
-		public static void printHeader(String headerInput)
-		{
-			System.out.println("================================================================");
-			System.out.println(" " + headerInput);
-			System.out.println("----------------------------------------------------------------\n\n");
-		}
-		public static void printHeader()
-		{
-			System.out.println("================================================================\n\n");
-		}
-		
-		public static void printFooter()
-		{
-			System.out.println("----------------------------------------------------------------");
-		}
+	public static void printHeader(String headerInput)
+	{
+		System.out.println("================================================================");
+		System.out.println(" " + headerInput);
+		System.out.println("----------------------------------------------------------------\n\n");
+	}
+	public static void printHeader()
+	{
+		System.out.println("================================================================\n\n");
+	}
+	
+	public static void printFooter()
+	{
+		System.out.println("----------------------------------------------------------------");
+	}
 	
 	public static void printSplash(Scanner scanner)
 	{

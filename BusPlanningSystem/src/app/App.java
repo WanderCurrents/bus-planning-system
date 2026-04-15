@@ -113,7 +113,7 @@ public class App
 		System.out.println("2. View buses/stations");
 		System.out.println("3. Admin menu");
 		System.out.println("4. More info");
-		System.out.println("\n\n0. Exit program\n\n\n");
+		System.out.println("\n\n0. Exit program\n\n");
 	
 		userSelection = InputHelper.getIntInRange(scanner, 0, 4);
 		
@@ -152,37 +152,35 @@ public class App
 		return true;	//Continue run-time loop
 	}
 	
-	
-	
 	//This is the adding user process, could be run by the main method upon login or in admin menu
-	public static void addUserProcess(UserManager um, Scanner scanner)
-	{
-		DisplayManager.clearScreen();
-		DisplayManager.printHeader("User Creation Screen");
-		System.out.print("Enter new username: ");
-		String newUsername = scanner.nextLine();
-		System.out.print("Enter new password: ");
-		String newPassword = scanner.nextLine();
-		boolean newAdmin = false;
-		
-		if(um.isCurrentUserAdmin() == true)
+		public static void addUserProcess(UserManager um, Scanner scanner)
 		{
-			if(InputHelper.getYesNo(scanner, "Is the new user an Admin? [Y/n] "))
+			DisplayManager.clearScreen();
+			DisplayManager.printHeader("User Creation Screen");
+			System.out.print("Enter new username: ");
+			String newUsername = scanner.nextLine();
+			System.out.print("Enter new password: ");
+			String newPassword = scanner.nextLine();
+			boolean newAdmin = false;
+			
+			if(um.isCurrentUserAdmin() == true)
 			{
-				newAdmin = true;
+				if(InputHelper.getYesNo(scanner, "Is the new user an Admin? [Y/n] "))
+				{
+					newAdmin = true;
+				}
+			}
+			
+			try 
+			{
+				um.addUser(newUsername, newPassword, newAdmin);
+
+				System.out.println("\n\nUser created!");
+			} catch (Exception e) {
+				System.out.println("ERROR: Creating new user, operation failed! :(");
+				e.printStackTrace();
+				System.out.print("\n\n\nPress ENTER to continue...");
+				scanner.nextLine();
 			}
 		}
-		
-		try 
-		{
-			um.addUser(newUsername, newPassword, newAdmin);
-
-			System.out.println("\n\nUser created!");
-		} catch (Exception e) {
-			System.out.println("ERROR: Creating new user, operation failed! :(");
-			e.printStackTrace();
-			System.out.print("\n\n\nPress ENTER to continue...");
-			scanner.nextLine();
-		}
-	}
 }

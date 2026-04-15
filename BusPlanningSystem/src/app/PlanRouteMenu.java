@@ -246,7 +246,7 @@ public class PlanRouteMenu
 				return null;	//...so quit
 			}
 			
-			selectedDestinations.add(selectSingleStation(sm, scanner));
+			selectedDestinations.add(nextStation);
 			
 			//This is the logic that allows the user to break out of this loop
 			while (true) 
