@@ -49,30 +49,12 @@ public class PlanRouteMenu
 		//Now that the routing system ran the plan route method, the travel plan should be updated
 		ArrayList<Leg> travelPlan = rs.getTravelPlan();
 		
-		
-		//DEBUG
-//
-//		System.out.println("DEBUG selected bus: " + selectedBus.getMakeModel());
-//		System.out.println("DEBUG selected start: " + startStation.getName());
-//		System.out.println("DEBUG destination: ");
-//		for(Station s : stops)
-//		{
-//			System.out.println("Dest: " + s.getName());
-//		}
-//		System.out.println("DEBUG Legs:");
-//		for(Leg l : travelPlan)
-//		{
-//			System.out.println("Start: " + l.getStartStation().getName() + "\tEnd: " + l.getEndStation().getName());
-//		}
-//		System.out.print("\n\n\n\nPress ENTER to continue...");
-//		scanner.nextLine();
-		////
-		
 		DisplayManager.printTravelPlan(selectedBus, travelPlan, scanner);
 		System.out.print("\n\nPress ENTER to continue...");
 		scanner.nextLine();
 		return false;	//Exit loop
 	}
+	
 	private static Bus selectSingleBus(BusManager bm, Scanner scanner)
 	{
 		String input;
@@ -212,8 +194,6 @@ public class PlanRouteMenu
 	}
 	private static ArrayList<Station> selectDestinations(StationManager sm, Station startStation, Scanner scanner)
 	{
-		String input;
-		int userSelection;
 		ArrayList<Station> selectedDestinations = new ArrayList<>();
 		
 		//This allows for multiple destination stations to be selected by user

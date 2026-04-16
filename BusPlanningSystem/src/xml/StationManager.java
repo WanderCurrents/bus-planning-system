@@ -95,6 +95,19 @@ public class StationManager
 		return false;	//Not found
 	}
 	
+	//Returns the stationID for a station based on station name, not case sensitive
+	public int findStation(String stationName)
+	{
+		for(Station s : list)
+		{
+			if(s.getName().toLowerCase().equals(stationName))
+			{
+				return s.getID();
+			}
+		}
+		return -99;	//Just a number to signal station not found
+	}
+	
 	public Station getStation(int targetID)
 	{
 		for(Station s : list)

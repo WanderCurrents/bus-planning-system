@@ -9,6 +9,7 @@ import model.FuelType;
 import model.Station;
 import model.User;
 import utility.InputHelper;
+import utility.Validator;
 import xml.BusManager;
 import xml.StationManager;
 import xml.UserManager;
@@ -108,11 +109,27 @@ public class AdminMenu
 		DisplayManager.clearScreen();
 		DisplayManager.printHeader("Admin Menu > Add User");
 		
-		System.out.print("Enter username: ");
-		String newUsername = scanner.nextLine();	//TODO: input validation and make sure user doesnt exist already
+		String newUsername;
+		while(true)
+		{
+			System.out.print("Enter username: ");
+			newUsername = scanner.nextLine();
+			if(Validator.isValidUsername(um, newUsername))
+			{
+				break;
+			}
+		}
 		
-		System.out.print("Enter password: ");
-		String newPassword = scanner.nextLine();	//TODO: input validation
+		String newPassword;
+		while(true)
+		{
+			System.out.print("Enter password: ");
+			newPassword = scanner.nextLine();
+			if(Validator.isValidPassword(newPassword))
+			{
+				break;
+			}
+		}
 		
 		boolean isAdmin = InputHelper.getYesNo(scanner, "Is this user an admin?");
 		try 
@@ -181,16 +198,43 @@ public class AdminMenu
 		DisplayManager.clearScreen();
 		DisplayManager.printHeader("Admin Menu > Add Station");
 		
-		System.out.print("Enter station name: ");
-		String newName = scanner.nextLine();	//TODO: input validation and make sure user doesnt exist already
+		String newName;
+		while(true)
+		{
+			System.out.print("Enter station name: ");
+			newName = scanner.nextLine();
+			if(Validator.isValidStationName(sm, newName))
+			{
+				break;
+			}
+		}
+
+		String input;
+		double newLat;
+		while(true)
+		{
+			System.out.print("Enter latitude: ");
+			input = scanner.nextLine();
+			if(Validator.isValidLatitude(input))
+			{
+				newLat = Double.parseDouble(input);	//Safe to parse
+				break;
+			}
+		}
+		double newLong;
+		while(true)
+		{
+			System.out.print("Enter longitude: ");
+			input = scanner.nextLine();
+			if(Validator.isValidLongitude(input))
+			{
+				newLong = Double.parseDouble(input);	//Safe to parse
+				break;
+			}
+		}
 		
-		System.out.print("Enter latitude: ");
-		double newLat = Double.parseDouble(scanner.nextLine());	//TODO: input validation
 		
-		System.out.print("Enter longitude: ");
-		double newLong = Double.parseDouble(scanner.nextLine());	//TODO: input validation
-		
-		EnumSet<FuelType> newSupportedFuel = EnumSet.allOf(FuelType.class);	//TODO: Make sure enum set isnt being a pain in the ass
+		EnumSet<FuelType> newSupportedFuel = EnumSet.allOf(FuelType.class);	
 		
 		boolean isRefuel = InputHelper.getYesNo(scanner, "Is this a refuel station?");
 		try 
@@ -259,8 +303,16 @@ public class AdminMenu
 		DisplayManager.clearScreen();
 		DisplayManager.printHeader("Admin Menu > Add Bus");
 		
-		System.out.print("Enter bus make and model: ");
-		String newMakeModel = scanner.nextLine();	//TODO: input validation
+		String newMakeModel;
+		while(true)
+		{
+			System.out.print("Enter bus make and model: ");
+			newMakeModel = scanner.nextLine();
+			if(Validator.isValidMakeModel(bm, newMakeModel))
+			{
+				break;
+			}
+		}
 		
 		String newType;
 		System.out.println("\nIs this bus:\n1. A city bus\nor\n2. A long distance bus");
@@ -287,8 +339,16 @@ public class AdminMenu
 			newFuelType = FuelType.DIESEL;
 		}
 		
+		String input;
+		int newFuelSize;
+		while(true)
+		{
+			System.out.print("Enter integer that represents fuel tank size (gal): ");
+			input = scanner.nextLine();
+			//TODO START BACK HERE ANDREW
+		}
 		
-		System.out.print("Enter integer that represents fuel tank size (gal): ");
+		
 		int newFuelSize = Integer.parseInt(scanner.nextLine());	//TODO: input validation
 		
 		System.out.print("Enter integer that represents fuel burn rate (gal/hr): ");

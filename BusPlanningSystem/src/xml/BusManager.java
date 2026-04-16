@@ -91,6 +91,19 @@ public class BusManager
 		return false;
 	}
 	
+	//Returns the busID for a bus based on make and model name, not case sensitive
+	public int findBus(String busMakeModel)
+	{
+		for(Bus b : list)
+		{
+			if(b.getMakeModel().toLowerCase().equals(busMakeModel))
+			{
+				return b.getID();
+			}
+		}
+		return -99;	//Just a number to signal station not found
+	}
+	
 	public Bus getBus(int targetID)
 	{
 		for(Bus b : list)

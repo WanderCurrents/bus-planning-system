@@ -55,6 +55,23 @@ public class InputHelper
 		}
 	}
 	
+	//Parses the input to make sure a legal double is submitted
+	public static double getDouble(Scanner scanner, String prompt)
+	{
+		while(true)
+		{
+			System.out.print(prompt);
+			try
+			{
+				return Double.parseDouble(scanner.nextLine());
+			} catch(Exception e)
+			{
+				System.out.println("\nInvalid input. Please enter a decimal number.");
+			
+			}
+		}
+	}
+	
 	//Prompts the user for an integer in the appropriate range
 	public static int getIntInRange(Scanner scanner, int min, int max)
 	{

@@ -8,6 +8,7 @@ import model.Bus;
 import model.Station;
 import model.Leg;
 import utility.InputHelper;
+import utility.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,34 +150,51 @@ public class App
 	}
 	
 	//This is the adding user process, could be run by the main method upon login or in admin menu
-		public static void addUserProcess(UserManager um, Scanner scanner)
+	public static void addUserProcess(UserManager um, Scanner scanner)
+	{
+		DisplayManager.clearScreen();
+		DisplayManager.printHeader("User Creation Screen");
+		String newUsername;
+		while(true)
 		{
-			DisplayManager.clearScreen();
-			DisplayManager.printHeader("User Creation Screen");
 			System.out.print("Enter new username: ");
-			String newUsername = scanner.nextLine();
-			System.out.print("Enter new password: ");
-			String newPassword = scanner.nextLine();
-			boolean newAdmin = false;
-			
-			if(um.isCurrentUserAdmin() == true)
+			newUsername = scanner.nextLine();
+			if(Validator.isValidUsername(um, newUsername))
 			{
-				if(InputHelper.getYesNo(scanner, "Is the new user an Admin? [Y/n] "))
-				{
-					newAdmin = true;
-				}
-			}
-			
-			try 
-			{
-				um.addUser(newUsername, newPassword, newAdmin);
-
-				System.out.println("\n\nUser created!");
-			} catch (Exception e) {
-				System.out.println("ERROR: Creating new user, operation failed! :(");
-				e.printStackTrace();
-				System.out.print("\n\n\nPress ENTER to continue...");
-				scanner.nextLine();
+				break;
 			}
 		}
+		
+		String newPassword;
+		while(true)
+		{
+			System.out.print("Enter new password: ");
+			newPassword = scanner.nextLine();
+			if(Validator.isValidPassword(newPassword))
+			{
+				break;
+			}
+		}
+		
+		boolean newAdmin = false;
+		if(um.isCurrentUserAdmin() == true)
+		{
+			if(InputHelper.getYesNo(scanner, "Is the new user an Admin? [Y/n] "))
+			{
+				newAdmin = true;
+			}
+		}
+		
+		try 
+		{
+			um.addUser(newUsername, newPassword, newAdmin);
+
+			System.out.println("\n\nUser created!");
+		} catch (Exception e) {
+			System.out.println("ERROR: Creating new user, operation failed! :(");
+			e.printStackTrace();
+			System.out.print("\n\n\nPress ENTER to continue...");
+			scanner.nextLine();
+		}
+	}
 }
