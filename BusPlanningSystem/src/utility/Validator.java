@@ -69,15 +69,35 @@ public class Validator
 	private static boolean hasValidDecimalPlaces(String input, int minPlaces, int maxPlaces)
 	{
 		//Checks if the number is a decimal (has a decimal point)
-		if(!input.contains("."))
+		int dotIndex = input.indexOf('.');
+		if(dotIndex == -1)
 		{
 			System.out.println("\nInvalid input. Value must contain a decimal point.");
 			return false;
 		}
 		
-		//Checks if there is a valid number of decimal places
+		//Split into two parts
 		String[] parts = input.split("\\.");
+		
+		
+		
+		//Must have exactly two parts, left of point and right of point (meaning there arent more than one decimal points)
+		if(parts.length !=2)
+		{
+			System.out.println("\nInvalid input. Value must only contain one decimal point and must have digits after the decimal point.");
+			return false;
+		}
+		
 		String decimals = parts[1];	//Select the area to the right of the '.'
+		
+		//Must have digits after the decimal
+		if(decimals.length() == 0)
+		{
+			System.out.println("\bnInvalid input. Value must have digits after the decimal point.");
+			return false;
+		}
+		
+		//Check the decimal place count
 		if(decimals.length() < minPlaces || decimals.length() > maxPlaces)
 		{
 			System.out.println("\nInvalid input. Value must have between " + minPlaces + " and " + maxPlaces + " decimal places.");
@@ -164,6 +184,19 @@ public class Validator
 	//Checks if the station latitude is valid. Must be a decimal number with atleast 4 decimal places of accuracy (no more than 8) and be a valid latitude
 	public static boolean isValidLatitude(String inLat)
 	{
+		double latitude;
+		
+		//Make sure the input can be cast to a Double
+		try
+		{
+			
+			latitude = Double.parseDouble(inLat);
+		} catch(Exception e)
+		{
+			System.out.println("\nInvalid input. Please enter a decimal number.");
+			return false;
+		}
+		
 		//Check if a valid decimal with atleast 4 places of accuracy and no more than 8
 		if(!hasValidDecimalPlaces(inLat, 4, 8))
 		{
@@ -171,7 +204,6 @@ public class Validator
 		}
 		
 		//Check to see if the latitude passed in falls with the range of latitudes
-		double latitude = Double.parseDouble(inLat);
 		if(latitude < -90 || latitude > 90)
 		{
 			System.out.println("\nInvalid input. Latitude must be between -90 and 90");
@@ -184,6 +216,19 @@ public class Validator
 	//Checks if the station longitude is valid. Must be a decimal number with atleast 4 decimal places of accuracy (no more than 8) and be a valid longitude
 	public static boolean isValidLongitude(String inLong)
 	{
+		double longitude;
+		
+		//Make sure the input can be cast to a Double
+		try
+		{
+			
+			longitude = Double.parseDouble(inLong);
+		} catch(Exception e)
+		{
+			System.out.println("\nInvalid input. Please enter a decimal number.");
+			return false;
+		}
+		
 		//Check if a valid decimal with atleast 4 places of accuracy and no more than 8
 		if(!hasValidDecimalPlaces(inLong, 4, 8))
 		{
@@ -191,7 +236,6 @@ public class Validator
 		}
 		
 		//Check to see if the longitude passed in falls with the range of latitudes
-		double longitude = Double.parseDouble(inLong);
 		if(longitude < -180 || longitude > 180)
 		{
 			System.out.println("\nInvalid input. Longitude must be between -180 and 180");
@@ -202,29 +246,107 @@ public class Validator
 	}
 	
 	//Checks if make and model name is valid. Must be size < 50 and > 4 characters long and contain only alphanumeric characters and spaces, and must not already exist
-		public static boolean isValidMakeModel(BusManager bm, String newMakeModel)
+	public static boolean isValidMakeModel(BusManager bm, String newMakeModel)
+	{
+		//Check to see if the bus already exists
+		if(bm.findBus(newMakeModel) != -99)	//Here, -99 is the value we chose to signal bus make and model not found, so if not equal then there must be a bus already
 		{
-			//Check to see if the bus already exists
-			if(bm.findBus(newMakeModel) != -99)	//Here, -99 is the value we chose to signal bus make and model not found, so if not equal then there must be a bus already
-			{
-				System.out.println("\nInvalid input. Bus make and model must not match a bus make and model that already exists!");
-				return false;
-			}
-			
-			//Check to make sure size of bus make and model name is acceptable (must be less than 50 chars long and longer than 4)
-			if(newMakeModel.length() > 50 || newMakeModel.length() < 4)
-			{
-				System.out.println("\nInvalid input. Bus make and model name must be atleast 4 characters long and no longer than 50 characters.");
-				return false;
-			}
-			
-			//Checks to make sure make and model name has no symbols (other than spaces)
-			if(!isAlphanumericAndSpace(newMakeModel))
-			{
-				System.out.println("\nInvalid input. Bus make and model must not contain any symbols other than spaces.");
-				return false;
-			}
-			
-			return true;	//Station name passes, return true
+			System.out.println("\nInvalid input. Bus make and model must not match a bus make and model that already exists!");
+			return false;
 		}
+		
+		//Check to make sure size of bus make and model name is acceptable (must be less than 50 chars long and longer than 4)
+		if(newMakeModel.length() > 50 || newMakeModel.length() < 4)
+		{
+			System.out.println("\nInvalid input. Bus make and model name must be atleast 4 characters long and no longer than 50 characters.");
+			return false;
+		}
+		
+		//Checks to make sure make and model name has no symbols (other than spaces)
+		if(!isAlphanumericAndSpace(newMakeModel))
+		{
+			System.out.println("\nInvalid input. Bus make and model must not contain any symbols other than spaces.");
+			return false;
+		}
+		
+		return true;	//Station name passes, return true
+	}
+	
+	//Checks if fuel tank size is valid. Must be integer that is > 0 and < 500
+	public static boolean isValidFuelTankSize(String newFuelSize)
+	{
+		int fuelTankSize;
+		
+		//Make sure the input can be cast to an int
+		try
+		{
+			
+			fuelTankSize = Integer.parseInt(newFuelSize);
+		} catch(Exception e)
+		{
+			System.out.println("\nInvalid input. Please enter an integer.");
+			return false;
+		}
+		
+		//Check to see if the fuel tank size passed in falls within acceptable range (0-500)
+		if(fuelTankSize < 0 || fuelTankSize > 500)
+		{
+			System.out.println("\nInvalid input. Fuel tank size must be larger than 0 and less than 500.");
+			return false;
+		}
+		
+		return true;	//Fuel tank size passes, return true
+	}
+	
+	//Checks if fuel burn rate is valid. Must be integer that is > 0 and < 50
+	public static boolean isValidBurnRate(String newBurnRate)
+	{
+		int fuelBurnRate;
+		
+		//Make sure the input can be cast to an int
+		try
+		{
+			
+			fuelBurnRate = Integer.parseInt(newBurnRate);
+		} catch(Exception e)
+		{
+			System.out.println("\nInvalid input. Please enter an integer.");
+			return false;
+		}
+		
+		//Check to see if the fuel tank size passed in falls within acceptable range (0-500)
+		if(fuelBurnRate < 0 || fuelBurnRate > 50)
+		{
+			System.out.println("\nInvalid input. Fuel burn rate must be larger than 0 and less than 50.");
+			return false;
+		}
+		
+		return true;	//Fuel burn rate passes, return true
+	}
+	
+	//Checks if bus cruise speed is valid. Must be integer that is > 0 and < 120
+	public static boolean isValidCruiseSpeed(String newCruiseSpeed)
+	{
+		int cruiseSpeed;
+		
+		//Make sure the input can be cast to an int
+		try
+		{
+			
+			cruiseSpeed = Integer.parseInt(newCruiseSpeed);
+		} catch(Exception e)
+		{
+			System.out.println("\nInvalid input. Please enter an integer.");
+			return false;
+		}
+		
+		//Check to see if the fuel tank size passed in falls within acceptable range (0-500)
+		if(cruiseSpeed < 0 || cruiseSpeed > 120)
+		{
+			System.out.println("\nInvalid input. Bus cruise speed must be larger than 0 and less than 120.");
+			return false;
+		}
+		
+		return true;	//Cruise speed passes, return true
+	}
 }

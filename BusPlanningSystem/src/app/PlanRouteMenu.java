@@ -138,7 +138,7 @@ public class PlanRouteMenu
 			
 			//Search for stations
 			System.out.println("\nSearching for stations that match \"" + input + "\"...");
-			List<Station> results = sm.subStringSearch(input);
+			List<Station> results = sm.subStringSearch(input, false);	//Since not admin search, set false flag to not display refuel stations
 			
 			//Print the results
 			if(results.isEmpty())	//If the search is bad, state it's empty

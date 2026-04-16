@@ -9,7 +9,7 @@ public class InputHelper
 	{
 		while(true)
 		{
-			System.out.print(prompt + "[Y/n] ");
+			System.out.print(prompt + " [Y/n] ");
 			String input = scanner.nextLine().toLowerCase();
 			
 			if(input.equals("y"))
@@ -55,22 +55,36 @@ public class InputHelper
 		}
 	}
 	
-	//Parses the input to make sure a legal double is submitted
-	public static double getDouble(Scanner scanner, String prompt)
-	{
-		while(true)
-		{
-			System.out.print(prompt);
-			try
-			{
-				return Double.parseDouble(scanner.nextLine());
-			} catch(Exception e)
-			{
-				System.out.println("\nInvalid input. Please enter a decimal number.");
-			
-			}
-		}
-	}
+//	//Parses the input to make sure a legal double is submitted from String
+//	public static double getDoubleFromString(String input)
+//	{
+//		while(true)
+//		{
+//			try
+//			{
+//				return Double.parseDouble(input);
+//			} catch(Exception e)
+//			{
+//				System.out.println("\nInvalid input. Please enter a decimal number.");
+//			
+//			}
+//		}
+//	}
+//	public static double getDouble(Scanner scanner, String prompt)
+//	{
+//		while(true)
+//		{
+//			System.out.print(prompt);
+//			try
+//			{
+//				return Double.parseDouble(scanner.nextLine());
+//			} catch(Exception e)
+//			{
+//				System.out.println("\nInvalid input. Please enter a decimal number.");
+//			
+//			}
+//		}
+//	}
 	
 	//Prompts the user for an integer in the appropriate range
 	public static int getIntInRange(Scanner scanner, int min, int max)

@@ -328,7 +328,6 @@ public class AdminMenu
 		
 		FuelType newFuelType;
 		System.out.println("\nDoes this bus use:\n1. Gasoline\nor\n2. Diesel");
-		System.out.println("Is this bus:\n1. A city bus\nor\n2. A long distance bus");
 		userSelection = InputHelper.getIntInRange(scanner, 1, 2);
 		if(userSelection == 1)
 		{
@@ -345,17 +344,37 @@ public class AdminMenu
 		{
 			System.out.print("Enter integer that represents fuel tank size (gal): ");
 			input = scanner.nextLine();
-			//TODO START BACK HERE ANDREW
+			if(Validator.isValidFuelTankSize(input))
+			{
+				newFuelSize = Integer.parseInt(input);
+				break;
+			}
 		}
 		
+		int newBurnRate;
+		while(true)
+		{
+			System.out.print("Enter integer that represents fuel burn rate (gal/hr): ");
+			input = scanner.nextLine();
+			if(Validator.isValidBurnRate(input))
+			{
+				newBurnRate = Integer.parseInt(input);
+				break;
+			}
+				
+		}
 		
-		int newFuelSize = Integer.parseInt(scanner.nextLine());	//TODO: input validation
-		
-		System.out.print("Enter integer that represents fuel burn rate (gal/hr): ");
-		int newBurnRate = Integer.parseInt(scanner.nextLine());	//TODO: input validation
-		
-		System.out.print("Enter integer that represents cruising speed (mph): ");
-		int newCruiseSpeed = Integer.parseInt(scanner.nextLine());	//TODO: input validation
+		int newCruiseSpeed;
+		while(true)
+		{
+			System.out.print("Enter integer that represents cruising speed (mph): ");
+			input = scanner.nextLine();
+			if(Validator.isValidCruiseSpeed(input))
+			{
+				newCruiseSpeed = Integer.parseInt(input);
+				break;
+			}
+		}
 		
 		try 
 		{
@@ -497,7 +516,7 @@ public class AdminMenu
 			
 			//Search for buses
 			System.out.println("\nSearching for stations that match \"" + input + "\"...");
-			List<Station> results = sm.subStringSearch(input);
+			List<Station> results = sm.subStringSearch(input, true);	//Do search in admin mode to see all refuel stations because, you know, this is in the admin panel
 			
 			//Print the results
 			if(results.isEmpty())	//If the search is bad, state it's empty
