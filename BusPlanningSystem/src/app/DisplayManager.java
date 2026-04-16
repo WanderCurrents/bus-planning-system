@@ -42,11 +42,11 @@ public class DisplayManager
 	{
 		System.out.println("================================================================");
 		System.out.println(" " + headerInput);
-		System.out.println("----------------------------------------------------------------\n\n");
+		System.out.println("----------------------------------------------------------------\n");
 	}
 	public static void printHeader()
 	{
-		System.out.println("================================================================\n\n");
+		System.out.println("================================================================\n");
 	}
 	
 	public static void printFooter()
@@ -63,7 +63,7 @@ public class DisplayManager
 		System.out.println("                           WARNING!                            ");
 		System.out.println("****************************************************************");
 		System.out.println("\n\n\n\n\n  THIS SOFTWARE IS NOT TO BE USED FOR ROUTE PLANNING PURPOSES\n\n");
-		System.out.print("\n\n\n\nPress ENTER to continue...");
+		System.out.print("\n\n\nPress ENTER to continue...");
 		scanner.nextLine();
 	}
 	
@@ -93,7 +93,21 @@ public class DisplayManager
 		int travelTimeMin = (int) Math.round((totalTravelTime - travelTimeHrs) * 60);	//Figuring out the remaining minutes
 		
 		System.out.printf("Total Travel Time: %d hours %d minutes%n", travelTimeHrs, travelTimeMin);	//Print the total time
-		System.out.printf("Total Distance: %.3f miles%n", totalDistance);
+		System.out.printf("Total Distance: %.3f miles%n", totalDistance);	
+	}
+	
+	public static void printMoreInfo(Scanner scanner)
+	{
+		clearScreen();
+		printHeader("More Info");
 		
+		System.out.println("Bus Planning System developed by Group 3");
+		System.out.println("*Joseph Deskevich - Team Lead");
+		System.out.println("*Andrew Stevens - System Architect & Technical Lead");
+		System.out.println("*Eva Cerda - Algorithm & Routing Logic Specialist");
+		System.out.println("*Caleb Wheeler - Documentation Lead & Software Support Developer");
+		System.out.println("\nFor CSCIA360 - Spring 2026");
+		System.out.print("\n\nPress ENTER to continue...");
+		scanner.nextLine();
 	}
 }

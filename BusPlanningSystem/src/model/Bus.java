@@ -34,6 +34,21 @@ public class Bus
 	{
 		return type;
 	}
+	public String getTypeDisplay()
+	{
+		if(type.equals("long_distance"))
+		{
+			return "Long Distance";
+		}
+		else if(type.equals("city"))
+		{
+			return "City";
+		}
+		else
+		{
+			return "ERROR";
+		}
+	}
 	public FuelType getFuelType()
 	{
 		return fuelType;

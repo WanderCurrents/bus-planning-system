@@ -64,7 +64,7 @@ public class App
 	{
 		DisplayManager.clearScreen();
 		DisplayManager.printHeader("Login Screen");
-		System.out.println("\n\n\n");
+		System.out.println("\n\n");
 		System.out.print("Username: ");
 		String username = scanner.nextLine();
 		
@@ -110,12 +110,11 @@ public class App
 		DisplayManager.clearScreen();
 		DisplayManager.printHeader("Main Menu  -  Welcome " + um.getCurrentUsername() + "!");
 		System.out.println("1. Plan route");
-		System.out.println("2. View buses/stations");
-		System.out.println("3. Admin menu");
-		System.out.println("4. More info");
-		System.out.println("\n\n0. Exit program\n\n");
+		System.out.println("2. Admin menu");
+		System.out.println("3. More info");
+		System.out.println("\n\n0. Exit program\n\n\n");
 	
-		userSelection = InputHelper.getIntInRange(scanner, 0, 4);
+		userSelection = InputHelper.getIntInRange(scanner, 0, 3);
 		
 		switch(userSelection)
 		{
@@ -127,10 +126,7 @@ public class App
 					//This loop is supposed to be empty
 				}
 				break;
-			case 2: 
-				
-				break;
-			case 3:
+			case 2:
 				while(AdminMenu.adminMenu(um, sm, bm, scanner))
 				{
 					//While adminMenu is true, keep calling it
@@ -138,8 +134,8 @@ public class App
 					//This loop is supposed to be empty
 				}
 				break;
-			case 4:
-				//More info
+			case 3:
+				DisplayManager.printMoreInfo(scanner);
 				break;
 			case 0:
 				return false;	//Exit run-time loop

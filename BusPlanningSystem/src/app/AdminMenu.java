@@ -35,10 +35,9 @@ public class AdminMenu
 			System.out.println("4. Remove station");
 			System.out.println("5. Add bus");
 			System.out.println("6. Remove bus");
-			System.out.println("7. See stats");
 			System.out.println("\n\n0. Exit Admin Menu\n\n");
 			
-			userSelection = InputHelper.getIntInRange(scanner, 0, 7);
+			userSelection = InputHelper.getIntInRange(scanner, 0, 6);
 			
 			switch(userSelection)
 			{
@@ -83,10 +82,13 @@ public class AdminMenu
 					}
 					break;
 				case 6:
-					//remove bus
+					while(removeBus(bm, scanner))
+					{
+						//While removeBus is true, keep calling it
+						//Once it returns false, exit
+						//This loop is supposed to be empty
+					}
 					break;
-				case 7:
-					//see stats
 				case 0:
 					return false;
 			}
@@ -261,7 +263,7 @@ public class AdminMenu
 		String newMakeModel = scanner.nextLine();	//TODO: input validation
 		
 		String newType;
-		System.out.println("Is this bus:\n1. A city bus\nor\n2. A long distance bus");
+		System.out.println("\nIs this bus:\n1. A city bus\nor\n2. A long distance bus");
 		int userSelection = InputHelper.getIntInRange(scanner, 1, 2);
 		if(userSelection == 1)
 		{
@@ -273,7 +275,7 @@ public class AdminMenu
 		}
 		
 		FuelType newFuelType;
-		System.out.println("Does this bus use:\n1. Gasoline\nor\n2. Diesel");
+		System.out.println("\nDoes this bus use:\n1. Gasoline\nor\n2. Diesel");
 		System.out.println("Is this bus:\n1. A city bus\nor\n2. A long distance bus");
 		userSelection = InputHelper.getIntInRange(scanner, 1, 2);
 		if(userSelection == 1)
@@ -322,7 +324,7 @@ public class AdminMenu
 			
 			Bus busToRemove = selectSingleBus(bm, scanner);
 			
-			boolean boolInput = InputHelper.getYesNo(scanner, "Are you sure you want to remove " + busToRemove.getMakeModel() + " ID: " + busToRemove.getID()  + "?");
+			boolean boolInput = InputHelper.getYesNo(scanner, "Are you sure you want to remove " + busToRemove.getMakeModel() + " (ID: " + busToRemove.getID()  + ")?");
 			if(boolInput)
 			{
 				try 
@@ -356,7 +358,7 @@ public class AdminMenu
 		}
 	}
 	
-	//----
+	//Admin single user selection method (shows more info than other single selection method)
 	private static User selectSingleUser(UserManager um, Scanner scanner)
 	{
 		String input;
@@ -419,6 +421,7 @@ public class AdminMenu
 		return selectedUser;
 	}
 	
+	//Admin single station selection method (shows more info than other single selection method)
 	private static Station selectSingleStation(StationManager sm, Scanner scanner)
 	{
 		String input;
@@ -481,5 +484,69 @@ public class AdminMenu
 		return selectedStation;
 	}
 	
-	//TODO: create single select method for bus
+	private static Bus selectSingleBus(BusManager bm, Scanner scanner)
+	{
+		String input;
+		boolean boolInput;
+		boolean searching = true;
+		int userSelection;
+		Bus selectedBus = null;
+		while(searching)
+		{
+			System.out.println();
+			System.out.print("Search for bus (press ENTER to see all buses): ");
+			input = scanner.nextLine();
+			
+			//Search for buses
+			System.out.println("\nSearching for buses that match \"" + input + "\"...");
+			List<Bus> results = bm.subStringSearch(input);
+			
+			//Print the results
+			if(results.isEmpty())	//If the search is bad, state it's empty
+			{
+				System.out.println("\nNo buses found!");
+				boolInput = InputHelper.getYesNo(scanner, "\n\nWould you like to try again (or n=quit)?");
+				if(!boolInput)
+				{
+					return null;
+				}
+				else
+				{
+					continue;	//Just pass through this iteration and redo outerloop
+				}
+			}
+			else	//If search isn't bad, continue
+			{
+				System.out.println("\nFound " + results.size() + " results:");
+				for(int i = 0; i < results.size(); i++)
+				{
+					//Note, the index in the list is 1 off the printed option number, make sure to remember that
+					//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 2 decimal points for max range
+					System.out.printf(
+						    "**%d\t- %s  -  Fuel Tank Size: %dgal  -  Fuel Burn: %dgal/hr  -  Max Range: %.2f miles  -  Cruise Speed: %dmph  -  Bus Type: %s  -  BusID: %d  -  Fuel Type: %s%n",
+						    i + 1,
+						    results.get(i).getMakeModel(),
+						    results.get(i).getFuelSize(),
+						    results.get(i).getFuelBurn(),
+						    results.get(i).getMaxRange(),
+						    results.get(i).getCruiseSpeed(),
+						    results.get(i).getTypeDisplay(),
+						    results.get(i).getID(),
+						    results.get(i).getFuelTypeDisplay()
+						);
+
+				}
+				
+				//Get the admin user choice
+				DisplayManager.printFooter();
+				
+				userSelection = InputHelper.getIntInRange(scanner, 1, results.size());
+				
+				
+				selectedBus = results.get(userSelection-1);	//Set the bus selection, -1 for index consideration
+				searching = false;	//Exit the outer loop
+			}
+		}
+		return selectedBus;
+	}
 }

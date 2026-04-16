@@ -16,7 +16,7 @@ public class PlanRouteMenu
 {
 	public static boolean planRouteMenu(UserManager um, StationManager sm, BusManager bm, Scanner scanner)
 	{
-		Bus selectedBus = selectBus(bm, scanner);	//Bus selection area
+		Bus selectedBus = selectSingleBus(bm, scanner);	//Bus selection area
 		if(selectedBus == null)	//If it returns null, then the user quit, quit the whole process
 		{
 			return false;
@@ -73,7 +73,7 @@ public class PlanRouteMenu
 		scanner.nextLine();
 		return false;	//Exit loop
 	}
-	private static Bus selectBus(BusManager bm, Scanner scanner)
+	private static Bus selectSingleBus(BusManager bm, Scanner scanner)
 	{
 		String input;
 		boolean boolInput;
@@ -116,12 +116,12 @@ public class PlanRouteMenu
 					//Note, the index in the list is 1 off the printed option number, make sure to remember that
 					//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 2 decimal points for max range
 					System.out.printf(
-						    "**%d\t- %s  -  Max Range: %.2f miles -  Cruise Speed: %dmph -  Fuel Type: %s%n",
+						    "**%d\t- %s  -  Max Range: %.2f miles  -  Cruise Speed: %dmph  -  Bus Type: %s%n",
 						    i + 1,
 						    results.get(i).getMakeModel(),
 						    results.get(i).getMaxRange(),
 						    results.get(i).getCruiseSpeed(),
-						    results.get(i).getFuelTypeDisplay()
+						    results.get(i).getTypeDisplay()
 						);
 
 				}
