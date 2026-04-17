@@ -120,7 +120,7 @@ public class Validator
 		//Check to make sure size of username is acceptable (must be less than 25 chars long and longer than 4
 		if(newUsername.length() > 25 || newUsername.length() < 4)
 		{
-			System.out.println("\nInvalid input. Username must be atleast 4 characters long and no longer than 25 characters.");
+			System.out.println("\nInvalid input. Username must be at least 4 characters long and no longer than 25 characters.");
 			return false;
 		}
 		
@@ -147,7 +147,7 @@ public class Validator
 		//Check to make sure the password has atleast one of each: a number, a letter, and a symbol
 		if(!hasLetterNumberSymbol(newPassword))
 		{
-			System.out.println("\nInvalid input. Password must have atleast one letter, number, and symbol.");
+			System.out.println("\nInvalid input. Password must have at least one letter, number, and symbol.");
 			return false;
 		}
 		

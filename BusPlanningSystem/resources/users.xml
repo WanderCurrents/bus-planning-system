@@ -10,4 +10,34 @@
         <password>verygoodpassword</password>
         <isAdmin>false</isAdmin>
     </user>
+    <user id="2">
+        <username>ecerda</username>
+        <password>apples</password>
+        <isAdmin>false</isAdmin>
+    </user>
+    <user id="3">
+        <username>aaadxgjnffvb</username>
+        <password>12345 A!</password>
+        <isAdmin>false</isAdmin>
+    </user>
+    <user id="4">
+        <username>addingspaceinfront</username>
+        <password>  123aA!</password>
+        <isAdmin>false</isAdmin>
+    </user>
+    <user id="5">
+        <username>spaceattheend</username>
+        <password>12345A! </password>
+        <isAdmin>false</isAdmin>
+    </user>
+    <user id="6">
+        <username>anothertry</username>
+        <password>123thispasswordcontainsfortyfivecharacters!</password>
+        <isAdmin>false</isAdmin>
+    </user>
+    <user id="7">
+        <username>copyingecerdapassowrd</username>
+        <password>12345A! </password>
+        <isAdmin>false</isAdmin>
+    </user>
 </users>

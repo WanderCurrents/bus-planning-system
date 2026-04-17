@@ -23,10 +23,12 @@ public class AdminMenu
 		DisplayManager.printHeader("Admin Menu");
 		if(!um.isCurrentUserAdmin())
 		{
-			System.out.println("\nERROR: Current user " + um.getCurrentUsername() + " is does not have admin status!");
+			System.out.println("\nERROR: Current user " + um.getCurrentUsername() + " does not have admin status!");
 			System.out.println("Please log in as an admin user to access the Admin Menu");
 			System.out.print("\n\n\nPress ENTER to continue...");
 			scanner.nextLine();
+			return false;
+			
 		}
 		else if(um.isCurrentUserAdmin())
 		{
