@@ -2,6 +2,7 @@ package app;
 
 import model.Bus;
 import model.Leg;
+import utility.InputHelper;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -75,11 +76,10 @@ public class DisplayManager
 
 		double totalTravelTime = 0;
 		double totalDistance = 0;
-		System.out.println("Travel Plan:");
+		System.out.println("Summary of Travel Plan:");
 		System.out.print("(start) " + travelPlan.get(0).getStartStation().getName());
 		for(Leg l : travelPlan)
 		{
-			System.out.println("DEBUG leg time raw: " + l.getTime());
 			totalTravelTime += l.getTime();
 			totalDistance += l.getDist();
 			System.out.printf(" >>>(%smiles)>>> ",		//Part that is going to be the blueprint for formatted data for distance
@@ -94,7 +94,24 @@ public class DisplayManager
 		int travelTimeMin = (int) Math.round((totalTravelTime - travelTimeHrs) * 60);	//Figuring out the remaining minutes
 		
 		System.out.printf("Total Travel Time: %d hours %d minutes%n", travelTimeHrs, travelTimeMin);	//Print the total time
-		System.out.printf("Total Distance: %.3f miles%n", totalDistance);	
+		System.out.printf("Total Distance: %.3f miles%n", totalDistance);
+		System.out.println();
+		if(InputHelper.getYesNo(scanner, "See detailed travel plan?"))
+		{
+			System.out.println("\n-----Detailed Travel Plan-----");
+			for(int i = 0; i < travelPlan.size(); i++)
+			{
+				System.out.println("Leg " + (i+1) + "  -  " + travelPlan.get(i).getStartStation().getName() + " to " + travelPlan.get(i).getEndStation().getName());
+				System.out.printf("**Distance: %.4f miles%n", travelPlan.get(i).getDist());
+				System.out.printf("**Heading: %.4f degrees%n", travelPlan.get(i).getHeading());
+				int legTimeHrs = (int) travelPlan.get(i).getTime();
+				int legTimeMin = (int) Math.round((travelPlan.get(i).getTime() - legTimeHrs) * 60);
+				System.out.println("**Travel Time: " + legTimeHrs + "hours " + legTimeMin + " minutes");
+				System.out.println();
+			}
+		}
+		
+		
 	}
 	
 	public static void printMoreInfo(Scanner scanner)
