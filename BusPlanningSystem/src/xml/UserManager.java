@@ -161,7 +161,7 @@ public class UserManager
 				matches.add(u);
 				continue;
 			}
-			if(u.getUsername().toLowerCase().equals(substring))
+			if(u.getUsername().toLowerCase().contains(substring))
 			{
 				matches.add(u);
 			}
