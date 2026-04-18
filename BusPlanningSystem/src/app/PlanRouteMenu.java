@@ -121,6 +121,7 @@ public class PlanRouteMenu
 		}
 		return selectedBus;
 	}
+	
 	private static Station selectSingleStation(StationManager sm, Scanner scanner)
 	{
 		String input;
@@ -225,13 +226,13 @@ public class PlanRouteMenu
 			{
 				return null;	//...so quit
 			}
-			/*if(startStation.equals(nextStation))
+			if(startStation.equals(nextStation) || selectedDestinations.contains(nextStation))
 			{
-				System.out.println("\nYour next destination cannot be the same as your starting station.");
+				System.out.println("\nInvalid input. Your next destination cannot be the same as your starting station or any destination station.");
 				System.out.print("\n\nPress ENTER to continue...");
 				scanner.nextLine();
 				continue; 
-			}*/
+			}
 			
 			selectedDestinations.add(nextStation);
 			

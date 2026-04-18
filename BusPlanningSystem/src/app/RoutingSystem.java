@@ -36,8 +36,6 @@ public class RoutingSystem
 	}
 	
 	
-	
-	
 	public void planRoute(ArrayList<Station> stops) throws Exception
 	{
 		travelPlan = new ArrayList<>();
