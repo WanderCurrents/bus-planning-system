@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<buses>
+    <bus id="0">
+        <makemodel>Orion V</makemodel>
+        <type>city</type>
+        <fueltype>GAS</fueltype>
+        <fuelsize>150</fuelsize>
+        <fuelburn>7</fuelburn>
+        <cruisespeed>45</cruisespeed>
+    </bus>
+    <bus id="1">
+        <makemodel>MCI D4000 Coach</makemodel>
+        <type>long_distance</type>
+        <fueltype>DIESEL</fueltype>
+        <fuelsize>164</fuelsize>
+        <fuelburn>12</fuelburn>
+        <cruisespeed>65</cruisespeed>
+    </bus>
+    <bus id="2">
+        <makemodel>Gillig Low Floor</makemodel>
+        <type>city</type>
+        <fueltype>GAS</fueltype>
+        <fuelsize>180</fuelsize>
+        <fuelburn>9</fuelburn>
+        <cruisespeed>50</cruisespeed>
+    </bus>
+    <bus id="3">
+        <makemodel>BlueBird MicroBird</makemodel>
+        <type>city</type>
+        <fueltype>GAS</fueltype>
+        <fuelsize>40</fuelsize>
+        <fuelburn>6</fuelburn>
+        <cruisespeed>70</cruisespeed>
+    </bus>
+    <bus id="4">
+        <makemodel>New Flyer XD</makemodel>
+        <type>long_distance</type>
+        <fueltype>DIESEL</fueltype>
+        <fuelsize>100</fuelsize>
+        <fuelburn>9</fuelburn>
+        <cruisespeed>65</cruisespeed>
+    </bus>
+    <bus id="5">
+        <makemodel>Thomas Built Buses</makemodel>
+        <type>city</type>
+        <fueltype>GAS</fueltype>
+        <fuelsize>100</fuelsize>
+        <fuelburn>8</fuelburn>
+        <cruisespeed>65</cruisespeed>
+    </bus>
+</buses>
