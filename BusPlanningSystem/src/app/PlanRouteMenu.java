@@ -121,7 +121,7 @@ public class PlanRouteMenu
 		}
 		return selectedBus;
 	}
-	private static Station selectSingleStation(StationManager sm, Station startStation, Scanner scanner)
+	private static Station selectSingleStation(StationManager sm, Scanner scanner)
 	{
 		String input;
 		boolean boolInput;
@@ -159,11 +159,6 @@ public class PlanRouteMenu
 				System.out.println("\nFound " + results.size() + " results:");
 				for(int i = 0; i < results.size(); i++)
 				{
-					Station s = results.get(i);
-					if(s.equals(startStation))
-					{
-						continue;
-					}
 					//Note, the index in the list is 1 off the printed option number, make sure to remember that
 					//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 4 decimal points for lat and long
 					System.out.printf(
@@ -225,18 +220,18 @@ public class PlanRouteMenu
 			System.out.println("\n");
 			
 			//Add station to the list
-			Station nextStation = selectSingleStation(sm, startStation, scanner);
+			Station nextStation = selectSingleStation(sm, scanner);
 			if(nextStation == null)	//If returned null, it means user quit inside this method...
 			{
 				return null;	//...so quit
 			}
-			if(startStation.equals(nextStation))
+			/*if(startStation.equals(nextStation))
 			{
 				System.out.println("\nYour next destination cannot be the same as your starting station.");
 				System.out.print("\n\nPress ENTER to continue...");
 				scanner.nextLine();
 				continue; 
-			}
+			}*/
 			
 			selectedDestinations.add(nextStation);
 			

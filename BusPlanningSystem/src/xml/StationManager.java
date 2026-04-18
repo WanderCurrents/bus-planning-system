@@ -147,7 +147,7 @@ public class StationManager
 					matches.add(s);
 				}
 			}
-		}
+		} 
 		else if(adminSearch)
 		{
 			for (Station s : list)
