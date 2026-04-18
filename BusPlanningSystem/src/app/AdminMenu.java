@@ -479,7 +479,7 @@ public class AdminMenu
 					//Note, the index in the list is 1 off the printed option number, make sure to remember that
 					//Very fancy looking, but it just formats the outputs to make things look cleaner
 					System.out.printf(
-						    "**%d\t- %s  -  Username: %s  -  Password: %s  -  UserID: %d  -  Is Admin? %s%n",
+						    "**%d\t  -  Username: %s  -  Password: %s  -  UserID: %d  -  Is Admin? %s%n",
 						    i + 1,
 						    results.get(i).getUsername(),
 						    results.get(i).getPassword(),

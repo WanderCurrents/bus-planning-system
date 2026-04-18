@@ -145,13 +145,23 @@ public class UserManager
 		}
 	}
 	
-	//SubString Search for users, using exact username, case-sensitive, and excludes current user
+	//SubString Search for users and excludes current user
 	public List<User> subStringSearch(String substring)
 	{
 		List<User> matches = new ArrayList<>();
+		String lower = substring.toLowerCase();
 		for (User u : list)
 		{
-			if(u.getUsername().equals(substring) && u.getID() != currentUser.getID())
+			if(u.getID() == currentUser.getID())
+			{
+				continue;
+			}
+			if(lower.isBlank())	//If just enter is entered, this is blank, return all
+			{
+				matches.add(u);
+				continue;
+			}
+			if(u.getUsername().toLowerCase().equals(substring))
 			{
 				matches.add(u);
 			}
