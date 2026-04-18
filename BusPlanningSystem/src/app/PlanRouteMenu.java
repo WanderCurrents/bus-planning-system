@@ -198,6 +198,7 @@ public class PlanRouteMenu
 		
 		//This allows for multiple destination stations to be selected by user
 		boolean moreStations = true;
+		System.out.println("moreStations = " + moreStations);
 		while(moreStations)
 		{
 			DisplayManager.clearScreen();
@@ -224,6 +225,13 @@ public class PlanRouteMenu
 			if(nextStation == null)	//If returned null, it means user quit inside this method...
 			{
 				return null;	//...so quit
+			}
+			if(startStation.equals(nextStation))
+			{
+				System.out.println("\nYour next destination cannot be the same as your starting station.");
+				System.out.print("\n\nPress ENTER to continue...");
+				scanner.nextLine();
+				continue; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
 			}
 			
 			selectedDestinations.add(nextStation);
