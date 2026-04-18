@@ -87,7 +87,7 @@ public class UserManager
 		//Save changes to XML file
 		handler.saveXML();
 		
-		//DO NOT UPDATE ID 
+		//DO NOT UPDATE ID, NO NEED
 	}
 	
 	public boolean removeUser(int targetID) throws Exception

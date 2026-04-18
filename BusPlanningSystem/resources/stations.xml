@@ -91,4 +91,11 @@
         <fueltypes>GAS,DIESEL</fueltypes>
         <isfuelonly>false</isfuelonly>
     </station>
+    <station id="13">
+        <name>Test Refuel Station</name>
+        <latitude>32.3994</latitude>
+        <longitude>-80.0003</longitude>
+        <fueltypes>GAS,DIESEL</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
 </stations>

@@ -80,6 +80,24 @@ public class StationManager
 		idIndex++;	//Update the index counter
 	}
 	
+	//Overloaded method for creating Users, passed in ID, no need to update ID, meant for user modification
+	public void addStation(int inID, String inName, double inLat, double inLong, EnumSet<FuelType> inFuelTypes, boolean inIsFuelOnly) throws Exception
+	{
+		//Create the new station addition
+		Station newStation = new Station(inID, inName, inLat, inLong, inFuelTypes, inIsFuelOnly);
+		
+		//Deal with DOM stuff
+		handler.addStationXML(inID, inName, inLat, inLong, inFuelTypes, inIsFuelOnly);
+		
+		//Update the list
+		list.add(newStation);
+		
+		//Save changes to XML file
+		handler.saveXML();
+		
+		//DO NOT UPDATE ID, NO NEED
+	}
+	
 	public boolean removeStation(int targetID) throws Exception
 	{
 		for(int i=0; i<list.size(); i++)

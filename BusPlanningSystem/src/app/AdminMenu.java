@@ -46,7 +46,7 @@ public class AdminMenu
 			System.out.println("12. Modify bus");
 			System.out.println("\n\n0. Exit Admin Menu\n\n");
 			
-			userSelection = InputHelper.getIntInRange(scanner, 0, 6);
+			userSelection = InputHelper.getIntInRange(scanner, 0, 12);
 			
 			switch(userSelection)
 			{
@@ -130,6 +130,7 @@ public class AdminMenu
 						//Once it returns false, exit
 						//This loop is supposed to be empty
 					}
+					break;
 				case 0:
 					return false;
 			}
@@ -251,6 +252,10 @@ public class AdminMenu
 			DisplayManager.printHeader("Admin Menu > Remove User");
 			
 			User userToRemove = selectSingleUser(um, scanner);
+			if(userToRemove == null)
+			{
+				return false;	//Prevents crash if user quits
+			}
 			
 			boolean boolInput = InputHelper.getYesNo(scanner, "Are you sure you want to remove " + userToRemove.getUsername()  + "?");
 			if(boolInput)
@@ -293,15 +298,28 @@ public class AdminMenu
 		{
 			DisplayManager.clearScreen();
 			DisplayManager.printHeader("Admin Menu > Modify User");
+			System.out.println("NOTE: press ENTER at any point to skip modifying that field");
 			
 			User userToRemove = selectSingleUser(um, scanner);
+			if(userToRemove == null)
+			{
+				return false;	//Prevents crash if user quits
+			}
 			
 			int newID = userToRemove.getID();
 			String newUsername;
 			while(true)
 			{
-				System.out.print("Enter new username (currently: \"" + userToRemove.getUsername() + "\"): ");
+				System.out.print("Modify username (was: \"" + userToRemove.getUsername() + "\"): ");
 				newUsername = scanner.nextLine();
+				
+				//If user presses enter, keep old value
+				if(newUsername.isBlank())
+				{
+					newUsername = userToRemove.getUsername();
+					break;
+				}
+				//Otherwise validate new value
 				if(Validator.isValidUsername(um, newUsername))
 				{
 					break;
@@ -313,6 +331,13 @@ public class AdminMenu
 			{
 				System.out.print("Enter new password: ");
 				newPassword = scanner.nextLine();
+				//If user presses enter, keep old value
+				if(newPassword.isBlank())
+				{
+					newPassword = userToRemove.getPassword();
+					break;
+				}
+				//Otherwise validate new value
 				if(Validator.isValidPassword(newPassword))
 				{
 					break;
@@ -322,6 +347,7 @@ public class AdminMenu
 			boolean isAdmin = InputHelper.getYesNo(scanner, "Is this user an admin?");
 			try 
 			{
+				um.removeUser(userToRemove.getID());
 				um.addUser(newID, newUsername, newPassword, isAdmin);
 			} catch (Exception e) {
 				System.out.println("ERROR: Cannot modify user :(");
@@ -459,6 +485,10 @@ public class AdminMenu
 			DisplayManager.printHeader("Admin Menu > Remove Station");
 			
 			Station stationToRemove = selectSingleStation(sm, scanner);
+			if(stationToRemove == null)
+			{
+				return false;	//Prevents crash if user quits
+			}
 			
 			boolean boolInput = InputHelper.getYesNo(scanner, "Are you sure you want to remove " + stationToRemove.getName()  + "?");
 			if(boolInput)
@@ -496,12 +526,150 @@ public class AdminMenu
 	
 	private static boolean modifyStation(StationManager sm, Scanner scanner)
 	{
-		
+		while(true)
+		{
+			DisplayManager.clearScreen();
+			DisplayManager.printHeader("Admin Menu > Modify Station");
+			
+			Station stationToRemove = selectSingleStation(sm, scanner);
+			if(stationToRemove == null)
+			{
+				return false;	//Prevents crash if user quits
+			}
+			
+			int newID = stationToRemove.getID();
+			String newName;
+			while(true)
+			{
+				System.out.print("Modify station name (was: \"" + stationToRemove.getName() + "\"): ");
+				newName = scanner.nextLine();
+				
+				//If user presses enter, keep old value
+				if(newName.isBlank())
+				{
+					newName = stationToRemove.getName();
+					break;
+				}
+				//Otherwise validate new value
+				if(Validator.isValidStationName(sm, newName))
+				{
+					break;
+				}
+			}
+
+			String input;
+			double newLat;
+			while(true)
+			{
+				System.out.print("Modify latitude (was: \"" + stationToRemove.getLatitude() + "\"): ");
+				input = scanner.nextLine();
+				
+				//If user presses enter, keep old value
+				if(input.isBlank())
+				{
+					newLat = stationToRemove.getLatitude();
+					break;
+				}
+				//Otherwise validate input
+				if(Validator.isValidLatitude(input))
+				{
+					newLat = Double.parseDouble(input);	//Safe to parse
+					break;
+				}
+			}
+			double newLong;
+			while(true)
+			{
+				System.out.print("Modify longitude (was: \"" + stationToRemove.getLongitude() + "\"): ");
+				input = scanner.nextLine();
+				
+				//If user presses enter, keep old value
+				if(input.isBlank())
+				{
+					newLong = stationToRemove.getLongitude();
+					break;
+				}
+				//Otherwise validate value
+				if(Validator.isValidLongitude(input))
+				{
+					newLong = Double.parseDouble(input);	//Safe to parse
+					break;
+				}
+			}
+			
+			
+			EnumSet<FuelType> newSupportedFuel = EnumSet.allOf(FuelType.class);	
+			
+			boolean isRefuel = InputHelper.getYesNo(scanner, "Is this a refuel station?");
+			
+			try 
+			{
+				sm.removeStation(stationToRemove.getID());
+				sm.addStation(newID, newName, newLat, newLong, newSupportedFuel, isRefuel);
+			} catch (Exception e) {
+				System.out.println("ERROR: Cannot modify station :(");
+				System.out.print("\n\n\nPress ENTER to continue...");
+				return false;
+			}
+			
+			System.out.println("Station modified successfully!\n");
+			if(!InputHelper.getYesNo(scanner, "Would you like to modify another station?"))
+			{
+				return false;
+			}
+			return true;
+		}
 	}
 	
-	private static void displayBuses(BusManager bs, Scanner scanner)
+	private static void displayBuses(BusManager bm, Scanner scanner)
 	{
+		String input;
+		boolean boolInput;
 		
+		System.out.println();
+		System.out.print("Search for bus (press ENTER to see all buses): ");
+		input = scanner.nextLine();
+		
+		//Search for buses
+		System.out.println("\nSearching for buses that match \"" + input + "\"...");
+		List<Bus> results = bm.subStringSearch(input);
+		
+		//Print the results
+		if(results.isEmpty())	//If the search is bad, state it's empty
+		{
+			System.out.println("\nNo buses found!");
+			boolInput = InputHelper.getYesNo(scanner, "\n\nWould you like to try again (or n=quit)?");
+			if(!boolInput)
+			{
+				return;
+			}
+			
+		}
+		else	//If search isn't bad, continue
+		{
+			System.out.println("\nFound " + results.size() + " results:");
+			for(int i = 0; i < results.size(); i++)
+			{
+				//Note, the index in the list is 1 off the printed option number, make sure to remember that
+				//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 2 decimal points for max range
+				System.out.printf(
+					    "**%d\t- %s  -  Fuel Tank Size: %dgal  -  Fuel Burn: %dgal/hr  -  Max Range: %.2f miles  -  Cruise Speed: %dmph  -  Bus Type: %s  -  BusID: %d  -  Fuel Type: %s%n",
+					    i + 1,
+					    results.get(i).getMakeModel(),
+					    results.get(i).getFuelSize(),
+					    results.get(i).getFuelBurn(),
+					    results.get(i).getMaxRange(),
+					    results.get(i).getCruiseSpeed(),
+					    results.get(i).getTypeDisplay(),
+					    results.get(i).getID(),
+					    results.get(i).getFuelTypeDisplay()
+					);
+
+			}
+			
+			System.out.print("\nPress ENTER to continue...");
+			scanner.nextLine();
+		}
 	}
 	
 	private static boolean addBus(BusManager bm, Scanner scanner)
@@ -608,6 +776,10 @@ public class AdminMenu
 			DisplayManager.printHeader("Admin Menu > Remove Bus");
 			
 			Bus busToRemove = selectSingleBus(bm, scanner);
+			if(busToRemove == null)
+			{
+				return false;	//Prevents crash if user quits
+			}
 			
 			boolean boolInput = InputHelper.getYesNo(scanner, "Are you sure you want to remove " + busToRemove.getMakeModel() + " (ID: " + busToRemove.getID()  + ")?");
 			if(boolInput)
@@ -645,7 +817,138 @@ public class AdminMenu
 	
 	private static boolean modifyBus(BusManager bm, Scanner scanner)
 	{
+		DisplayManager.clearScreen();
+		DisplayManager.printHeader("Admin Menu > Modify Bus");
 		
+		
+		Bus busToRemove = selectSingleBus(bm, scanner);
+		if(busToRemove == null)
+		{
+			return false;	//Prevents crash if user quits
+		}
+		
+		int newID = busToRemove.getID();
+		String newMakeModel;
+		while(true)
+		{
+			System.out.print("Modify bus make and model (was: \"" + busToRemove.getMakeModel() + "\"): ");
+			newMakeModel = scanner.nextLine();
+			
+			//If user presses enter, keep old value
+			if(newMakeModel.isBlank())
+			{
+				newMakeModel = busToRemove.getMakeModel();
+				break;
+			}
+			//Otherwise validate value
+			if(Validator.isValidMakeModel(bm, newMakeModel))
+			{
+				break;
+			}
+		}
+		
+		String newType;
+		System.out.println("\nModify bus type (was: \"" + busToRemove.getType() + "\"):\n1. A city bus\nor\n2. A long distance bus");
+		int userSelection = InputHelper.getIntInRange(scanner, 1, 2);
+		if(userSelection == 1)
+		{
+			newType = "city";
+		}
+		else
+		{
+			newType = "long_distance";
+		}
+		
+		FuelType newFuelType;
+		System.out.println("\nModify bus fuel type (was: \"" + busToRemove.getFuelTypeDisplay() + "\"):\n1. Gasoline\nor\n2. Diesel");
+		userSelection = InputHelper.getIntInRange(scanner, 1, 2);
+		if(userSelection == 1)
+		{
+			newFuelType = FuelType.GAS;
+		}
+		else
+		{
+			newFuelType = FuelType.DIESEL;
+		}
+		
+		String input;
+		int newFuelSize;
+		while(true)
+		{
+			System.out.print("Modify fuel tank size (was: \"" + busToRemove.getFuelSize() + "gal\"): ");
+			input = scanner.nextLine();
+			
+			//If user presses enter, keep old value
+			if(input.isBlank())
+			{
+				newFuelSize = busToRemove.getFuelSize();
+				break;
+			}
+			//Otherwise validate input
+			if(Validator.isValidFuelTankSize(input))
+			{
+				newFuelSize = Integer.parseInt(input);
+				break;
+			}
+		}
+		
+		int newBurnRate;
+		while(true)
+		{
+			System.out.print("Modify fuel burn rate (was: \"" + busToRemove.getFuelBurn() + "gal/hr\"): ");
+			input = scanner.nextLine();
+			
+			//If user presses enter, keep old value
+			if(input.isBlank())
+			{
+				newBurnRate = busToRemove.getFuelBurn();
+				break;
+			}
+			//Otherwise validate input
+			if(Validator.isValidBurnRate(input))
+			{
+				newBurnRate = Integer.parseInt(input);
+				break;
+			}
+				
+		}
+		
+		int newCruiseSpeed;
+		while(true)
+		{
+			System.out.print("Modify cruising speed (was: \"" + busToRemove.getCruiseSpeed() + "mph\"): ");
+			input = scanner.nextLine();
+			
+			//If user presses enter, keep old value
+			if(input.isBlank())
+			{
+				newCruiseSpeed = busToRemove.getCruiseSpeed();
+				break;
+			}
+			//Otherwise validate input
+			if(Validator.isValidCruiseSpeed(input))
+			{
+				newCruiseSpeed = Integer.parseInt(input);
+				break;
+			}
+		}
+		
+		try 
+		{
+			bm.removeBus(busToRemove.getID());
+			bm.addBus(newID, newMakeModel, newType, newFuelType, newFuelSize, newBurnRate, newCruiseSpeed);
+		} catch (Exception e) {
+			System.out.println("ERROR: Cannot modify bus :(");
+			System.out.print("\n\n\nPress ENTER to continue...");
+			return false;
+		}
+		
+		System.out.println("Bus modified successfully!\n");
+		if(!InputHelper.getYesNo(scanner, "Would you like to modify another bus?"))
+		{
+			return false;
+		}
+		return true;
 	}
 	
 	//Admin single user selection method (shows more info than other single selection method)

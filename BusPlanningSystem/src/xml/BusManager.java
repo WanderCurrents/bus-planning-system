@@ -76,6 +76,24 @@ public class BusManager
 		idIndex++;	//Update the index counter
 	}
 	
+	//Overloaded method for creating Users, passed in ID, no need to update ID, meant for user modification
+	public void addBus(int inID, String inMakeModel, String inType, FuelType inFuelType, int inFuelSize, int inFuelBurn, int inCruiseSpeed) throws Exception
+	{
+		//Create the new bus addition
+		Bus newBus = new Bus(inID, inMakeModel, inType, inFuelType, inFuelSize, inFuelBurn, inCruiseSpeed);
+		
+		//Deal with DOM stuff
+		handler.addBusXML(inID, inMakeModel, inType, inFuelType, inFuelSize, inFuelBurn, inCruiseSpeed);
+		
+		//Update the list
+		list.add(newBus);
+		
+		//Save changes to XML file
+		handler.saveXML();
+		
+		//DO NOT UPDATE ID, NO NEED
+	}
+	
 	public boolean removeBus(int targetID) throws Exception
 	{
 		for(int i=0; i<list.size(); i++)
