@@ -231,7 +231,7 @@ public class PlanRouteMenu
 				System.out.println("\nYour next destination cannot be the same as your starting station.");
 				System.out.print("\n\nPress ENTER to continue...");
 				scanner.nextLine();
-				continue; //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+				continue; 
 			}
 			
 			selectedDestinations.add(nextStation);
