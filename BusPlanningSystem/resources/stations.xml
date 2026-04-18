@@ -91,11 +91,4 @@
         <fueltypes>GAS,DIESEL</fueltypes>
         <isfuelonly>false</isfuelonly>
     </station>
-    <station id="13">
-        <name>Moon Base Alpha</name>
-        <latitude>0.0</latitude>
-        <longitude>0.0</longitude>
-        <fueltypes>GAS,DIESEL</fueltypes>
-        <isfuelonly>true</isfuelonly>
-    </station>
 </stations>

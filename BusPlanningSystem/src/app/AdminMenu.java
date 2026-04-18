@@ -32,12 +32,18 @@ public class AdminMenu
 		}
 		else if(um.isCurrentUserAdmin())
 		{
-			System.out.println("1. Add user");
-			System.out.println("2. Remove user");
-			System.out.println("3. Add station");
-			System.out.println("4. Remove station");
-			System.out.println("5. Add bus");
-			System.out.println("6. Remove bus");
+			System.out.println("1. Display users");
+			System.out.println("2. Add user");
+			System.out.println("3. Remove user");
+			System.out.println("4. Modify user");
+			System.out.println("5. Display stations");
+			System.out.println("6. Add station");
+			System.out.println("7. Remove station");
+			System.out.println("8. Modify station");
+			System.out.println("9. Display buses");
+			System.out.println("10. Add bus");
+			System.out.println("11. Remove bus");
+			System.out.println("12. Modify bus");
 			System.out.println("\n\n0. Exit Admin Menu\n\n");
 			
 			userSelection = InputHelper.getIntInRange(scanner, 0, 6);
@@ -45,6 +51,9 @@ public class AdminMenu
 			switch(userSelection)
 			{
 				case 1:
+					displayUsers(um, scanner);
+					break;
+				case 2:
 					while(addUser(um, scanner))
 					{
 						//While addUser is true, keep calling it
@@ -52,7 +61,7 @@ public class AdminMenu
 						//This loop is supposed to be empty
 					}
 					break;
-				case 2:
+				case 3:
 					while(removeUser(um, scanner))
 					{
 						//While removeUser is true, keep calling it
@@ -60,7 +69,18 @@ public class AdminMenu
 						//This loop is supposed to be empty
 					}
 					break;
-				case 3:
+				case 4: 
+					while(modifyUser(um, scanner))
+					{
+						//While modifyUser is true, keep calling it
+						//Once it returns false, exit
+						//This loop is supposed to be empty
+					}
+					break;
+				case 5:
+					displayStations(sm, scanner);
+					break;
+				case 6:
 					while(addStation(sm, scanner))
 					{
 						//While addStation is true, keep calling it
@@ -68,7 +88,7 @@ public class AdminMenu
 						//This loop is supposed to be empty
 					}
 					break;
-				case 4:
+				case 7:
 					while(removeStation(sm, scanner))
 					{
 						//While removeStation is true, keep calling it
@@ -76,7 +96,18 @@ public class AdminMenu
 						//This loop is supposed to be empty
 					}
 					break;
-				case 5:
+				case 8:
+					while(modifyStation(sm, scanner))
+					{
+						//While modifyStation is true, keep calling it
+						//Once it returns false, exit
+						//This loop is supposed to be empty
+					}
+					break;
+				case 9:
+					displayBuses(bm, scanner);
+					break;
+				case 10:
 					while(addBus(bm, scanner))
 					{
 						//While addBus is true, keep calling it
@@ -84,7 +115,7 @@ public class AdminMenu
 						//This loop is supposed to be empty
 					}
 					break;
-				case 6:
+				case 11:
 					while(removeBus(bm, scanner))
 					{
 						//While removeBus is true, keep calling it
@@ -92,6 +123,13 @@ public class AdminMenu
 						//This loop is supposed to be empty
 					}
 					break;
+				case 12:
+					while(modifyBus(bm, scanner))
+					{
+						//While modifyBus is true, keep calling it
+						//Once it returns false, exit
+						//This loop is supposed to be empty
+					}
 				case 0:
 					return false;
 			}
@@ -104,6 +142,59 @@ public class AdminMenu
 		}
 		
 		return true;
+	}
+	
+	private static void displayUsers(UserManager um, Scanner scanner)
+	{
+		DisplayManager.clearScreen();
+		DisplayManager.printHeader("Admin Menu > Display Users");
+		
+		String input;
+		boolean boolInput;
+		
+		System.out.println();
+		System.out.print("Search for user (press ENTER to see all users): ");
+		input = scanner.nextLine();
+		
+		//Search for users
+		System.out.println("\nSearching for users that match \"" + input + "\"...");
+		List<User> results = um.subStringSearch(input);
+		
+		//Print the results
+		if(results.isEmpty())	//If the search is bad, state it's empty
+		{
+			System.out.println("\nNo users found!");
+			boolInput = InputHelper.getYesNo(scanner, "\n\nWould you like to try again (or n=quit)?");
+			if(!boolInput)
+			{
+				return;
+			}
+			
+		}
+		else	//If search isn't bad, continue
+		{
+			System.out.println("\nFound " + results.size() + " results:");
+			for(int i = 0; i < results.size(); i++)
+			{
+				//Note, the index in the list is 1 off the printed option number, make sure to remember that
+				//Very fancy looking, but it just formats the outputs to make things look cleaner
+				System.out.printf(
+					    "**%d\t  -  Username: %s  -  Password: %s  -  UserID: %d  -  Is Admin? %s%n",
+					    i + 1,
+					    results.get(i).getUsername(),
+					    results.get(i).getPassword(),
+					    results.get(i).getID(),
+					    results.get(i).getIsAdmin()
+					);
+
+			}
+			
+			System.out.print("\nPress ENTER to continue...");
+			scanner.nextLine();
+				
+			
+		}
+		
 	}
 	
 	private static boolean addUser(UserManager um, Scanner scanner)
@@ -191,6 +282,109 @@ public class AdminMenu
 			{
 				return false;
 			}
+			
+		}
+	}
+	
+	//Basically just a remove function and add function in one
+	private static boolean modifyUser(UserManager um, Scanner scanner)
+	{
+		while(true)
+		{
+			DisplayManager.clearScreen();
+			DisplayManager.printHeader("Admin Menu > Modify User");
+			
+			User userToRemove = selectSingleUser(um, scanner);
+			
+			int newID = userToRemove.getID();
+			String newUsername;
+			while(true)
+			{
+				System.out.print("Enter new username (currently: \"" + userToRemove.getUsername() + "\"): ");
+				newUsername = scanner.nextLine();
+				if(Validator.isValidUsername(um, newUsername))
+				{
+					break;
+				}
+			}
+			
+			String newPassword;
+			while(true)
+			{
+				System.out.print("Enter new password: ");
+				newPassword = scanner.nextLine();
+				if(Validator.isValidPassword(newPassword))
+				{
+					break;
+				}
+			}
+			
+			boolean isAdmin = InputHelper.getYesNo(scanner, "Is this user an admin?");
+			try 
+			{
+				um.addUser(newID, newUsername, newPassword, isAdmin);
+			} catch (Exception e) {
+				System.out.println("ERROR: Cannot modify user :(");
+				System.out.print("\n\n\nPress ENTER to continue...");
+				return false;
+			}
+			
+			System.out.println("User modified successfully!\n");
+			if(!InputHelper.getYesNo(scanner, "Would you like to modify another user?"))
+			{
+				return false;
+			}
+			return true;
+		}
+		
+	}
+	
+	private static void displayStations(StationManager sm, Scanner scanner)
+	{
+		DisplayManager.clearScreen();
+		DisplayManager.printHeader("Admin Menu > Display Stations");
+		
+		String input;
+		boolean boolInput;
+		System.out.println();
+		System.out.print("Search for station (press ENTER to see all stations): ");
+		input = scanner.nextLine();
+		
+		//Search for buses
+		System.out.println("\nSearching for stations that match \"" + input + "\"...");
+		List<Station> results = sm.subStringSearch(input, true);	//Do search in admin mode to see all refuel stations because, you know, this is in the admin panel
+		
+		//Print the results
+		if(results.isEmpty())	//If the search is bad, state it's empty
+		{
+			System.out.println("\nNo stations found!");
+			boolInput = InputHelper.getYesNo(scanner, "\n\nWould you like to try again (or n=quit)?");
+			if(!boolInput)
+			{
+				return;
+			}
+		}
+		else	//If search isn't bad, continue
+		{
+			System.out.println("\nFound " + results.size() + " results:");
+			for(int i = 0; i < results.size(); i++)
+			{
+				//Note, the index in the list is 1 off the printed option number, make sure to remember that
+				//Very fancy looking, but it just formats the outputs to make decimals look cleaner, formatted to 4 decimal points for lat and long
+				System.out.printf(
+					    "**%d\t- %s  -  Lat: %.4f  -  Long: %.4f  -  StationID: %d  -  Is Refuel Station?: %s%n",
+					    i + 1,
+					    results.get(i).getName(),
+					    results.get(i).getLatitude(),
+					    results.get(i).getLongitude(),
+					    results.get(i).getID(),
+					    results.get(i).getIsFuelOnly()
+					);
+
+			}
+			
+			System.out.print("\nPress ENTER to continue...");
+			scanner.nextLine();
 			
 		}
 	}
@@ -298,6 +492,16 @@ public class AdminMenu
 			}
 			
 		}
+	}
+	
+	private static boolean modifyStation(StationManager sm, Scanner scanner)
+	{
+		
+	}
+	
+	private static void displayBuses(BusManager bs, Scanner scanner)
+	{
+		
 	}
 	
 	private static boolean addBus(BusManager bm, Scanner scanner)
@@ -439,6 +643,11 @@ public class AdminMenu
 		}
 	}
 	
+	private static boolean modifyBus(BusManager bm, Scanner scanner)
+	{
+		
+	}
+	
 	//Admin single user selection method (shows more info than other single selection method)
 	private static User selectSingleUser(UserManager um, Scanner scanner)
 	{
@@ -453,7 +662,7 @@ public class AdminMenu
 			System.out.print("Search for user (press ENTER to see all users): ");
 			input = scanner.nextLine();
 			
-			//Search for buses
+			//Search for users
 			System.out.println("\nSearching for users that match \"" + input + "\"...");
 			List<User> results = um.subStringSearch(input);
 			

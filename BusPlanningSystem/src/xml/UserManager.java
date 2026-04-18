@@ -72,6 +72,24 @@ public class UserManager
 		idIndex++;	//Update the index counter
 	}
 	
+	//Overloaded method for creating Users, passed in ID, no need to update ID, meant for user modification
+	public void addUser(int ID, String inUsername, String inPassword, boolean inIsAdmin) throws Exception
+	{
+		//Create the new user addition
+		User newUser = new User(ID, inUsername, inPassword, inIsAdmin);
+		
+		//Deal with DOM stuff
+		handler.addUserXML(ID, inUsername, inPassword, inIsAdmin);
+		
+		//Update the list
+		list.add(newUser);
+		
+		//Save changes to XML file
+		handler.saveXML();
+		
+		//DO NOT UPDATE ID 
+	}
+	
 	public boolean removeUser(int targetID) throws Exception
 	{
 		for(int i=0; i<list.size(); i++)

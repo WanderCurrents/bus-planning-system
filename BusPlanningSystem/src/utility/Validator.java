@@ -289,7 +289,7 @@ public class Validator
 		}
 		
 		//Check to see if the fuel tank size passed in falls within acceptable range (0-500)
-		if(fuelTankSize < 0 || fuelTankSize > 500)
+		if(fuelTankSize <= 0 || fuelTankSize >= 500)
 		{
 			System.out.println("\nInvalid input. Fuel tank size must be larger than 0 and less than 500.");
 			return false;
@@ -315,7 +315,7 @@ public class Validator
 		}
 		
 		//Check to see if the fuel tank size passed in falls within acceptable range (0-500)
-		if(fuelBurnRate < 0 || fuelBurnRate > 50)
+		if(fuelBurnRate <= 0 || fuelBurnRate >= 50)
 		{
 			System.out.println("\nInvalid input. Fuel burn rate must be larger than 0 and less than 50.");
 			return false;
@@ -341,7 +341,7 @@ public class Validator
 		}
 		
 		//Check to see if the fuel tank size passed in falls within acceptable range (0-500)
-		if(cruiseSpeed < 0 || cruiseSpeed > 120)
+		if(cruiseSpeed <= 0 || cruiseSpeed >= 120)
 		{
 			System.out.println("\nInvalid input. Bus cruise speed must be larger than 0 and less than 120.");
 			return false;
