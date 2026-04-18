@@ -79,6 +79,7 @@ public class DisplayManager
 		System.out.print("(start) " + travelPlan.get(0).getStartStation().getName());
 		for(Leg l : travelPlan)
 		{
+			System.out.println("DEBUG leg time raw: " + l.getTime());
 			totalTravelTime += l.getTime();
 			totalDistance += l.getDist();
 			System.out.printf(" >>>(%smiles)>>> ",		//Part that is going to be the blueprint for formatted data for distance

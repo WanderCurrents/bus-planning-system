@@ -298,7 +298,7 @@ public class AdminMenu
 		{
 			DisplayManager.clearScreen();
 			DisplayManager.printHeader("Admin Menu > Modify User");
-			System.out.println("NOTE: press ENTER at any point to skip modifying that field");
+			System.out.println("NOTE: press ENTER to skip modifying an input field");
 			
 			User userToRemove = selectSingleUser(um, scanner);
 			if(userToRemove == null)
@@ -530,6 +530,7 @@ public class AdminMenu
 		{
 			DisplayManager.clearScreen();
 			DisplayManager.printHeader("Admin Menu > Modify Station");
+			System.out.println("NOTE: press ENTER to skip modifying an input field");
 			
 			Station stationToRemove = selectSingleStation(sm, scanner);
 			if(stationToRemove == null)
@@ -819,7 +820,7 @@ public class AdminMenu
 	{
 		DisplayManager.clearScreen();
 		DisplayManager.printHeader("Admin Menu > Modify Bus");
-		
+		System.out.println("NOTE: press ENTER to skip modifying an input field");
 		
 		Bus busToRemove = selectSingleBus(bm, scanner);
 		if(busToRemove == null)

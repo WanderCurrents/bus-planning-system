@@ -44,11 +44,6 @@ public class RoutingSystem
 		{
 			planLeg(stops.get(i), stops.get(i+1));
 		}
-		System.out.println("DEBUG from routing");
-		for(Leg l : travelPlan)
-		{
-			System.out.print("Start: " + l.getStartStation() + "\tEnd: " + l.getEndStation());
-		}
 	}
 	//A single-leg solver
 	private void planLeg(Station startStation, Station endStation) throws Exception 

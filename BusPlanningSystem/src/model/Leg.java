@@ -1,6 +1,6 @@
 package model;
 
-import model.Geo;
+
 public class Leg
 {
 	private Station startStation; 
