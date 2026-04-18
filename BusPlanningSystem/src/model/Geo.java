@@ -18,7 +18,7 @@ public class Geo
 		return distance;
 	}
 	
-	public static double calcHeading(double longitude1, double latitude1, double longitude2, double latitude2) 
+	public static double calcHeading(double latitude1, double longitude1, double latitude2, double longitude2)
 	{		
 		double differenceLon = longitude2 - longitude1;
 		double differenceLat = latitude2 - latitude1; 
@@ -45,7 +45,7 @@ public class Geo
 	
 	public static double calcTime(Station startStation, Station endStation, Bus bus)
 	{
-		double distance = calcDist(startStation.getLatitude(), startStation.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
+		double distance = calcDist(startStation.getLongitude(), startStation.getLatitude(), endStation.getLongitude(), endStation.getLatitude());
 		
 		double time = (distance/bus.getCruiseSpeed());
 		

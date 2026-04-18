@@ -143,6 +143,13 @@ public class Validator
 			System.out.println("\nInvalid input. Password must be atleast 8 characters long.");
 			return false;
 		}
+
+		//Check to make sure that passwords do not go over more than 25 characters.
+		//Super long passwords could cause storage issues, especially if they are complex.
+		if(newPassword.length() > 50){
+			System.out.println("\nInvalid input. Password can not exceed 50 characters.");
+			return false;
+		}
 		
 		//Check to make sure the password has atleast one of each: a number, a letter, and a symbol
 		if(!hasLetterNumberSymbol(newPassword))
