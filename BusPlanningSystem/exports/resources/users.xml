@@ -50,4 +50,9 @@
         <password>VeryGoodPassword123!</password>
         <isAdmin>true</isAdmin>
     </user>
+    <user id="10">
+        <username>Bobb</username>
+        <password>A1!11111</password>
+        <isAdmin>false</isAdmin>
+    </user>
 </users>

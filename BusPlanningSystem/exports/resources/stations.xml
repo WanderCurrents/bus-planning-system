@@ -91,4 +91,25 @@
         <fueltypes>GAS,DIESEL</fueltypes>
         <isfuelonly>false</isfuelonly>
     </station>
+    <station id="14">
+        <name>RefuelStation14</name>
+        <latitude>33.250219624912205</latitude>
+        <longitude>-101.58710579243788</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
+    <station id="15">
+        <name>RefuelStation15</name>
+        <latitude>33.12360259565394</latitude>
+        <longitude>-98.96098145819138</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
+    <station id="16">
+        <name>RefuelStation16</name>
+        <latitude>33.92692680697036</latitude>
+        <longitude>-115.62247850946403</longitude>
+        <fueltypes>GAS</fueltypes>
+        <isfuelonly>true</isfuelonly>
+    </station>
 </stations>

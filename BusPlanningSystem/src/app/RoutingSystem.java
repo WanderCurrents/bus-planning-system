@@ -155,7 +155,7 @@ public class RoutingSystem
 	
 	private Station insertRefuelStation(Station currentStation, Station endStation) throws Exception 
 	{
-			System.out.println("Travel plan is impossible due to lack of refueling facilities. Inserting refuel station to plan.");
+			System.out.println("\nTravel plan is impossible due to lack of refueling facilities. Inserting refuel station to plan.");
 			
 			int rStationID = stationManager.getIDIndex();	//Asks the manager for the next available ID for naming and object creation
 			String rStationName = ("RefuelStation" + Integer.toString(rStationID));

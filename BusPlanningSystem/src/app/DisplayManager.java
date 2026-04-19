@@ -94,6 +94,11 @@ public class DisplayManager
 		
 		int travelTimeHrs = (int) totalTravelTime;	//Figuring out the hours
 		int travelTimeMin = (int) Math.round((totalTravelTime - travelTimeHrs) * 60);	//Figuring out the remaining minutes
+		if(travelTimeMin == 60)	//Bug can happen where the minutes 59.999 is rounded to 60, when this happens do this
+		{
+			travelTimeHrs += 1;	//Add one hour to hours
+			travelTimeMin = 0;	//Reset minutes back to 0
+		}
 		
 		System.out.printf("Total Travel Time: %d hours %d minutes%n", travelTimeHrs, travelTimeMin);	//Print the total time
 		System.out.printf("Total Distance: %.3f miles%n", totalDistance);
@@ -108,6 +113,11 @@ public class DisplayManager
 				System.out.printf("**Heading: %.4f degrees%n", travelPlan.get(i).getHeading());
 				int legTimeHrs = (int) travelPlan.get(i).getTime();
 				int legTimeMin = (int) Math.round((travelPlan.get(i).getTime() - legTimeHrs) * 60);
+				if(legTimeMin == 60)
+				{
+					legTimeHrs += 1;
+					legTimeMin = 0;
+				}
 				System.out.println("**Travel Time: " + legTimeHrs + " hours " + legTimeMin + " minutes");
 				System.out.println();
 			}
@@ -122,10 +132,10 @@ public class DisplayManager
 		printHeader("More Info");
 		
 		System.out.println("Bus Planning System developed by Group 3");
-		System.out.println("*Joseph Deskevich - Team Lead");
 		System.out.println("*Andrew Stevens - System Architect & Technical Lead");
-		System.out.println("*Eva Cerda - Algorithm & Routing Logic Specialist");
-		System.out.println("*Caleb Wheeler - Documentation Lead & Software Support Developer");
+		System.out.println("*Eva Cerda - Algorithm/Routing Logic Specialist & Lead QA");
+		System.out.println("*Caleb Wheeler - Documentation Lead");
+		System.out.println("*Joseph Deskevich - Team Lead");
 		System.out.println("\nFor CSCIA360 - Spring 2026");
 		System.out.print("\n\nPress ENTER to continue...");
 		scanner.nextLine();
