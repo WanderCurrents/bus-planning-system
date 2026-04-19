@@ -90,6 +90,8 @@ public class DisplayManager
 		}
 		System.out.print(" (end)\n\n");
 		
+		
+		
 		int travelTimeHrs = (int) totalTravelTime;	//Figuring out the hours
 		int travelTimeMin = (int) Math.round((totalTravelTime - travelTimeHrs) * 60);	//Figuring out the remaining minutes
 		
@@ -106,7 +108,7 @@ public class DisplayManager
 				System.out.printf("**Heading: %.4f degrees%n", travelPlan.get(i).getHeading());
 				int legTimeHrs = (int) travelPlan.get(i).getTime();
 				int legTimeMin = (int) Math.round((travelPlan.get(i).getTime() - legTimeHrs) * 60);
-				System.out.println("**Travel Time: " + legTimeHrs + "hours " + legTimeMin + " minutes");
+				System.out.println("**Travel Time: " + legTimeHrs + " hours " + legTimeMin + " minutes");
 				System.out.println();
 			}
 		}

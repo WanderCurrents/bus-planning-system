@@ -624,6 +624,9 @@ public class AdminMenu
 	
 	private static void displayBuses(BusManager bm, Scanner scanner)
 	{
+		DisplayManager.clearScreen();
+		DisplayManager.printHeader("Admin Menu > Display Buses");
+		
 		String input;
 		boolean boolInput;
 		
