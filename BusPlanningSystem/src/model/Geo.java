@@ -45,7 +45,7 @@ public class Geo
 	
 	public static double calcTime(Station startStation, Station endStation, Bus bus)
 	{
-		double distance = calcDist(startStation.getLongitude(), startStation.getLatitude(), endStation.getLongitude(), endStation.getLatitude());
+		double distance = calcDist(startStation.getLatitude(), startStation.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
 		
 		double time = (distance/bus.getCruiseSpeed());
 		
