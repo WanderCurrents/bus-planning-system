@@ -77,46 +77,11 @@
         <fueltypes>GAS,DIESEL</fueltypes>
         <isfuelonly>false</isfuelonly>
     </station>
-    <station id="12">
-        <name>Ngari Bus Station</name>
-        <latitude>32.45</latitude>
-        <longitude>84.99</longitude>
-        <fueltypes>GAS,DIESEL</fueltypes>
-        <isfuelonly>false</isfuelonly>
-    </station>
     <station id="13">
         <name>Test Refuel Station</name>
         <latitude>32.3994</latitude>
         <longitude>-80.0003</longitude>
         <fueltypes>GAS,DIESEL</fueltypes>
-        <isfuelonly>true</isfuelonly>
-    </station>
-    <station id="14">
-        <name>RefuelStation14</name>
-        <latitude>32.83511438389297</latitude>
-        <longitude>-92.97753738682975</longitude>
-        <fueltypes>GAS</fueltypes>
-        <isfuelonly>true</isfuelonly>
-    </station>
-    <station id="15">
-        <name>RefuelStation15</name>
-        <latitude>33.22107861335785</latitude>
-        <longitude>-100.98270115574903</longitude>
-        <fueltypes>GAS</fueltypes>
-        <isfuelonly>true</isfuelonly>
-    </station>
-    <station id="16">
-        <name>RefuelStation16</name>
-        <latitude>33.607902707572585</latitude>
-        <longitude>-109.00569911140444</longitude>
-        <fueltypes>GAS</fueltypes>
-        <isfuelonly>true</isfuelonly>
-    </station>
-    <station id="17">
-        <name>RefuelStation17</name>
-        <latitude>33.99559683636162</latitude>
-        <longitude>-117.04674218295456</longitude>
-        <fueltypes>GAS</fueltypes>
         <isfuelonly>true</isfuelonly>
     </station>
     <station id="10">

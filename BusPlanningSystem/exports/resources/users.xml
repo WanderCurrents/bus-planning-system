@@ -45,4 +45,9 @@
         <password>12345 A!</password>
         <isAdmin>true</isAdmin>
     </user>
+    <user id="9">
+        <username>andrews</username>
+        <password>VeryGoodPassword123!</password>
+        <isAdmin>true</isAdmin>
+    </user>
 </users>
