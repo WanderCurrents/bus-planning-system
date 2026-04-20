@@ -34,7 +34,7 @@ public class Validator
 		return true;	//If the whole string has no symbols (excluding spaces), then it's true
 	}
 	
-	//Validator-used class that checks if the string has atleast one letter, one number, and one symbol. Exits early if all are true
+	//Validator-used class that checks if the string has at least one letter, one number, and one symbol. Exits early if all are true
 	private static boolean hasLetterNumberSymbol(String s)
 	{
 		boolean hasLetter = false;
@@ -140,7 +140,7 @@ public class Validator
 		//Check to make sure size of password is acceptable (Must be more than 8 characters long
 		if(newPassword.length() < 8)
 		{
-			System.out.println("\nInvalid input. Password must be atleast 8 characters long.");
+			System.out.println("\nInvalid input. Password must be at least 8 characters long.");
 			return false;
 		}
 
@@ -174,7 +174,7 @@ public class Validator
 		//Check to make sure size of station name is acceptable (must be less than 50 chars long and longer than 4)
 		if(newName.length() > 50 || newName.length() < 4)
 		{
-			System.out.println("\nInvalid input. Station name must be atleast 4 characters long and no longer than 50 characters.");
+			System.out.println("\nInvalid input. Station name must be at least 4 characters long and no longer than 50 characters.");
 			return false;
 		}
 		
@@ -265,7 +265,7 @@ public class Validator
 		//Check to make sure size of bus make and model name is acceptable (must be less than 50 chars long and longer than 4)
 		if(newMakeModel.length() > 50 || newMakeModel.length() < 4)
 		{
-			System.out.println("\nInvalid input. Bus make and model name must be atleast 4 characters long and no longer than 50 characters.");
+			System.out.println("\nInvalid input. Bus make and model name must be at least 4 characters long and no longer than 50 characters.");
 			return false;
 		}
 		

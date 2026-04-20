@@ -166,7 +166,7 @@ public class RoutingSystem
 			//Prevent tiny movements
 			if(calcPortionOfRoute < 0.05)
 			{
-				calcPortionOfRoute = 0.05;	//Always move atleast 5% forward
+				calcPortionOfRoute = 0.05;	//Always move at least 5% forward
 			}
 			//Prevent overshooting the destination
 			if(calcPortionOfRoute > 0.95)
