@@ -1,3 +1,13 @@
+// PlanRouteMenu Class
+//----------------------
+//Description: class that holds the methods responsible for running and displaying operations related to planning a route
+//Attributes: n/a
+//Methods:	planRouteMenu(um : UserManager, sm : StationManager, bm : BusManager, scanner : Scanner) : boolean
+//			selectSingleBus(bm : BusManager, scanner : Scanner) : Bus
+//			selectSingleStation(sm : StationManager, scanner : Scanner) : Station
+//			selectStartStation(sm : StationManager, scanner : Scanner) : Station
+//			selectDestinations(sm : StationManager, startStation : Station, scanner : Scanner) : ArrayList<Station> 
+
 package app;
 
 import java.util.ArrayList;
@@ -12,21 +22,28 @@ import xml.BusManager;
 import xml.StationManager;
 import xml.UserManager;
 
+
 public class PlanRouteMenu 
 {
+	//Method that calls other methods and is the orchestrator for the user interface for the plan route system
 	public static boolean planRouteMenu(UserManager um, StationManager sm, BusManager bm, Scanner scanner)
 	{
+		//First bus needs to be selected
 		Bus selectedBus = selectSingleBus(bm, scanner);	//Bus selection area
 		if(selectedBus == null)	//If it returns null, then the user quit, quit the whole process
 		{
 			return false;
 		}
-		RoutingSystem rs = new RoutingSystem(selectedBus, sm);
+		RoutingSystem rs = new RoutingSystem(selectedBus, sm);	//Establish a RoutingSystem class instance
+		
+		//Then the start station needs to be selected
 		Station startStation = selectStartStation(sm, scanner);	//Start station selection area
 		if(startStation == null)	//If it returns null, then the user quit, quit the whole process
 		{
 			return false;
 		}
+		
+		//Then the destination stations need to be selected
 		ArrayList<Station> stops = selectDestinations(sm, startStation, scanner);	//Start the destination selection area
 		if(stops == null)
 		{
@@ -34,7 +51,7 @@ public class PlanRouteMenu
 		}
 		stops.add(0, startStation);	//Adding the starting station to the beginning of the stops
 		
-		//Start doing the routing system stuff
+		//Start doing the routing system operations
 		try 
 		{
 			rs.planRoute(stops);
@@ -49,12 +66,13 @@ public class PlanRouteMenu
 		//Now that the routing system ran the plan route method, the travel plan should be updated
 		ArrayList<Leg> travelPlan = rs.getTravelPlan();
 		
-		DisplayManager.printTravelPlan(selectedBus, travelPlan, scanner);
+		DisplayManager.printTravelPlan(selectedBus, travelPlan, scanner);	//Display the results
 		System.out.print("\n\nPress ENTER to continue...");
 		scanner.nextLine();
 		return false;	//Exit loop
 	}
 	
+	//Method that prompts the user to select a single bus
 	private static Bus selectSingleBus(BusManager bm, Scanner scanner)
 	{
 		String input;
@@ -122,6 +140,7 @@ public class PlanRouteMenu
 		return selectedBus;
 	}
 	
+	//Method that prompts the user to select a single station
 	private static Station selectSingleStation(StationManager sm, Scanner scanner)
 	{
 		String input;
@@ -183,6 +202,8 @@ public class PlanRouteMenu
 		}
 		return selectedStation;
 	}
+	
+	//Method that is responsible for prompting the user for a starting station
 	private static Station selectStartStation(StationManager sm, Scanner scanner)
 	{
 		Station selectedStart = null;
@@ -193,6 +214,8 @@ public class PlanRouteMenu
 		
 		return selectedStart;
 	}
+	
+	//Method that is responsible for prompting the user for destination station(s)
 	private static ArrayList<Station> selectDestinations(StationManager sm, Station startStation, Scanner scanner)
 	{
 		ArrayList<Station> selectedDestinations = new ArrayList<>();
@@ -254,6 +277,7 @@ public class PlanRouteMenu
 			}
 		}
 		return selectedDestinations;
-	}
-	
+	}	
 }
+
+//"There is no way to defeat despair. All you can do is keep coding." -Kirat, 2026

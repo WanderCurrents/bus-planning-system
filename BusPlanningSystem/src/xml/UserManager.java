@@ -187,3 +187,5 @@ public class UserManager
 		return matches;
 	}
 }
+
+//"You only get to die for having lived. Most people who could ever exist, will never even be born." -Neil deGrasse Tyson

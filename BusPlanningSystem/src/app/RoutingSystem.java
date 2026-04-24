@@ -1,3 +1,21 @@
+// RoutingSystem Class
+//----------------------
+//Description: class that is instantiated at the beginning of the routing system process
+//Attributes: 	stationManager : StationManager
+//				travelPlan : ArrayList<Leg>
+//				refuelStationsInRange : ArrayList<Station>
+//				bus : Bus
+//Methods:	RoutingSystem(bus : Bus, stationManager : StationManager)
+//			getTravelPlan() : ArrayList<Leg>
+//			getRefuelStationsInRange() : ArrayList<Station>
+//			planRoute(stops : ArrayList<Station>) : void
+//			planLeg(startStation : Station, endStation : Station) : void
+//			canReachDestination(distToEnd : double) : boolean
+//			findStationsInRangeCloserThanCurrent(current : Station, end : Station) : ArrayList<Station>
+//			pickClosestStationToEnd(list : ArrayList<Station>, end : Station) : Station
+//			addLeg(start : Station, end : Station) : void
+//			insertRefuelStation(currentStation : Station, endStation : Station) : Station
+
 package app;
 
 import java.util.ArrayList;
@@ -14,28 +32,30 @@ import xml.StationManager;
 public class RoutingSystem 
 {
 	StationManager stationManager;											//Same StationManager created in App
-	private ArrayList<Leg> travelPlan = new ArrayList<>();					//The final list of legs
+	private ArrayList<Leg> travelPlan = new ArrayList<>();					//The list of legs in the travel plan
 	private ArrayList<Station> refuelStationsInRange = new ArrayList<>();	//Temporary list of stations that the bus can reach from current station
-//	private Station nextRefuelStation;										//A variable that ends up holding the chosen next station temporarily DEPRECATED?
 	private Bus bus;														//Bus that we're routing
 	
-	public RoutingSystem(Bus bus, StationManager stationManager)	//Main constructor for Routing System
-	{																//Requires bus and StationManager parameters
+	//Main constructor for Routing System
+	public RoutingSystem(Bus bus, StationManager stationManager)	
+	{
 		this.bus = bus;
 		this.stationManager = stationManager;	//Dependency injection for the Station Manager, only one exists still
 	}
 	
+	//Getter for getting the travel plan list
 	public ArrayList<Leg> getTravelPlan() 
 	{
 		return travelPlan;
 	}
 	
+	//Getter for getting the refuel stations in range list
 	public ArrayList<Station> getRefuelStationsInRange() 
 	{
 		return refuelStationsInRange;
 	}
 	
-	
+	//Primary method and entry point for planning a route (backend)
 	public void planRoute(ArrayList<Station> stops) throws Exception
 	{
 		travelPlan = new ArrayList<>();
@@ -45,12 +65,15 @@ public class RoutingSystem
 			planLeg(stops.get(i), stops.get(i+1));
 		}
 	}
-	//A single-leg solver
+	
+	//A single-leg solver method called by other methods
 	private void planLeg(Station startStation, Station endStation) throws Exception 
 	{	
+		//Set current station to the starting station
 		Station currentStation = startStation;
 		Station next;
 		
+		//Check for various things and enter the different phases of leg planning
 		while(!currentStation.equals(endStation))
 		{
 			double distToEnd = Geo.calcDist(currentStation.getLatitude(), currentStation.getLongitude(), endStation.getLatitude(), endStation.getLongitude());
@@ -87,19 +110,20 @@ public class RoutingSystem
 				}
 			}
 			
-			
 			//Phase 4: Add the leg to the travel plan
 			addLeg(currentStation, next);
 			currentStation = next;
 		}	
-		
 	}
 	
+	//Helper method to return a true/false value if the bus can reach the distance to the end
 	private boolean canReachDestination(double distToEnd)
 	{
 		return bus.getMaxRange() >= distToEnd;
 	}
-	private ArrayList<Station> findStationsInRangeCloserThanCurrent(Station current, Station end)
+	
+	//Helper method to return a list of any station in range and is closer to the destination than the current station
+	private ArrayList<Station> findStationsInRangeCloserThanCurrent(Station current, Station end)	//Beautiful method name I know, you're welcome
 	{
 		ArrayList<Station> list = new ArrayList<>();
 		
@@ -130,6 +154,8 @@ public class RoutingSystem
 		
 		return list;
 	}
+	
+	//Helper method that takes a list of any station in range (see findStationsInRangeCloserThanCurrent method) and picks the best option
 	private Station pickClosestStationToEnd(ArrayList<Station> list, Station end)
 	{
 		Station best = list.get(0);
@@ -148,11 +174,14 @@ public class RoutingSystem
 		
 		return best;
 	}
+	
+	//Helper method that adds a leg to the travelPlan
 	private void addLeg(Station start, Station end)
 	{
 		travelPlan.add(new Leg(start, end, bus));
 	}
 	
+	//Helper method that inserts a refuel station in the travel plan which requires adding a new leg
 	private Station insertRefuelStation(Station currentStation, Station endStation) throws Exception 
 	{
 			System.out.println("\nTravel plan is impossible due to lack of refueling facilities. Inserting refuel station to plan.");
@@ -174,6 +203,7 @@ public class RoutingSystem
 				calcPortionOfRoute = 0.95;	//Never place station too close to target
 			}
 			
+			//"Your past already took enough from you, don't let it take your future too." -Unknown wise person
 			
 			//Calculate coordinates for the location
 			double rLongitude = (currentStation.getLongitude() + calcPortionOfRoute * (endStation.getLongitude() - currentStation.getLongitude()));
@@ -190,6 +220,4 @@ public class RoutingSystem
 			
 			return newRefuelStation;
 	}
-	
-	
 }

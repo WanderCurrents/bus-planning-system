@@ -1,3 +1,21 @@
+//  InputHelper Class
+//----------------------
+//Description: class that holds the methods that help make sure user inputs follow logic rules that we have in place rather than make sure that the inputs are legal (e.g. InputHelper)
+//Attributes: n/a
+//Methods:	isAlphanumeric(s : String) : boolean
+//			isAlphanumericAndSpace(s : String) : boolean
+//			hasLetterNumerSymbol(s : String) : boolean
+//			hasValidDecimalPlaces(input : String, minPlaces : int, maxPlaces : int) : boolean
+//			isValidUsername(um : UserManager, newUsername : String) : boolean
+//			isValidPassword(newPassword : String) : boolean
+//			isValidStationName(sm : StationManager, newName : String) : boolean
+//			isValidLatitude(inLat : String) : boolean
+//			isValidLongitude(inLong : String) : boolean
+//			isValidMakeModel(bm : BusManager, newMakeModel : String) : boolean
+//			isValidFuelTankSize(newFuelSize : String) : boolean
+//			isValidBurnRate(newBurnRate : String) : boolean
+//			isValidCruiseSpeed(newCruiseSpeed : String) : boolean
+
 package utility;
 
 import xml.BusManager;
@@ -357,3 +375,5 @@ public class Validator
 		return true;	//Cruise speed passes, return true
 	}
 }
+
+//Do you climb a mountain for the world to see you? Or for you to see the world?

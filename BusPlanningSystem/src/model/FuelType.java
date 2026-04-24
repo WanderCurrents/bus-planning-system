@@ -1,4 +1,14 @@
+//      Bus Class
+//----------------------
+//Description: enum class for working with fuel types,
+//Current Enums:	GAS, DIESEL
+//Attributes:	displayName : String
+//Methods:	FuelType(displayName : String)		
+//			getDisplayName() : String
+//			parseFuelType(s : String) : FuelType
+			
 package model;
+
 
 public enum FuelType 
 {
@@ -7,16 +17,19 @@ public enum FuelType
 
 	private final String displayName;
 	
+	//Enum constructor
 	FuelType(String displayName)
 	{
 		this.displayName = displayName;
 	}
 	
+	//Getter for returning the display name attribute of the enum entry
 	public String getDisplayName()
 	{
 		return displayName;
 	}
 	
+	//Additional future-proof method for input validation
 	public static FuelType parseFuelType(String s)	//Allows data validation methods to make sure a user input maps correctly
 	{
 		if (s == null)
@@ -44,6 +57,5 @@ public enum FuelType
 				return null;	//Data validation from caller will decide how to deal null issues
 		}
 	}
-
 }
 

@@ -1,3 +1,15 @@
+//   DisplayManager Class
+//----------------------
+//Description: class that holds the methods helpful for displaying general things
+//Attributes: n/a
+//Methods:	clearScreen() : void
+//			printHeader(headerInput : String) : void
+//			printHeader() : void
+//			printFooter() : void
+//			printSplash(scanner : Scanner) : void
+//			printTravelPlan(bus : Bus, travelPlan : ArrayList<Leg>, scanner : Scanner) : void
+//			printMoreInfo(scanner : Scanner) : void
+
 package app;
 
 import model.Bus;
@@ -7,9 +19,9 @@ import utility.InputHelper;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 public class DisplayManager 
 {
+	//Method for clearing the screen, supports ANSI clearing codes for terminal environments and also fallback to printing a bunch of new lines
 	public static void clearScreen()
 	{
 		try
@@ -38,23 +50,26 @@ public class DisplayManager
 		}
 	}
 	
-	//Method for printing a header for a screen, if there is an input passed in then a special header is printed
+	//Method for printing a header for a screen
+	public static void printHeader()
+	{
+		System.out.println("================================================================\n");
+	}
+	//Overloaded method for printing a header, takes the input as an argument and prints it
 	public static void printHeader(String headerInput)
 	{
 		System.out.println("================================================================");
 		System.out.println(" " + headerInput);
 		System.out.println("----------------------------------------------------------------\n");
 	}
-	public static void printHeader()
-	{
-		System.out.println("================================================================\n");
-	}
 	
+	//Prints the footer, useful for separating user input fields occasionally
 	public static void printFooter()
 	{
 		System.out.println("----------------------------------------------------------------");
 	}
 	
+	//Prints the warning splash screen
 	public static void printSplash(Scanner scanner)
 	{
 		
@@ -68,12 +83,13 @@ public class DisplayManager
 		scanner.nextLine();
 	}
 	
-
+	//Prints the travel plan, given a list of legs from route planning system
 	public static void printTravelPlan(Bus bus, ArrayList<Leg> travelPlan, Scanner scanner) 
 	{
 		clearScreen();
 		printHeader("Plan Route Results");
 
+		//Summary information graphic
 		double totalTravelTime = 0;
 		double totalDistance = 0;
 		System.out.println("Summary of Travel Plan:");
@@ -90,8 +106,7 @@ public class DisplayManager
 		}
 		System.out.print(" (end)\n\n");
 		
-		
-		
+		//Summary information for the whole trip
 		int travelTimeHrs = (int) totalTravelTime;	//Figuring out the hours
 		int travelTimeMin = (int) Math.round((totalTravelTime - travelTimeHrs) * 60);	//Figuring out the remaining minutes
 		if(travelTimeMin == 60)	//Bug can happen where the minutes 59.999 is rounded to 60, when this happens do this
@@ -99,10 +114,11 @@ public class DisplayManager
 			travelTimeHrs += 1;	//Add one hour to hours
 			travelTimeMin = 0;	//Reset minutes back to 0
 		}
-		
 		System.out.printf("Total Travel Time: %d hours %d minutes%n", travelTimeHrs, travelTimeMin);	//Print the total time
 		System.out.printf("Total Distance: %.3f miles%n", totalDistance);
 		System.out.println();
+		
+		//Gives the option to print travel plan a leg at a time for a more detailed view
 		if(InputHelper.getYesNo(scanner, "See detailed travel plan?"))
 		{
 			System.out.println("\n-----Detailed Travel Plan-----");
@@ -122,10 +138,9 @@ public class DisplayManager
 				System.out.println();
 			}
 		}
-		
-		
 	}
 	
+	//Prints the group information in the "More Info" menu option
 	public static void printMoreInfo(Scanner scanner)
 	{
 		clearScreen();
@@ -141,3 +156,5 @@ public class DisplayManager
 		scanner.nextLine();
 	}
 }
+
+//"...You know, the sun doesn't care whether the grass appreciates its rays, right? It just keeps on shining..." -Ethan Hawke, March 2026

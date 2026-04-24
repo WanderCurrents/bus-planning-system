@@ -1,6 +1,16 @@
+//  InputHelper Class
+//----------------------
+//Description: class that holds the methods that help make sure user inputs are legal and clean
+//Attributes: n/a
+//Methods:	getYesNo(scanner : Scanner, prompt : String) : boolean
+//			getInt(scanner : Scanner) : int
+//			getInt(scanner : Scanner, prompt : String) : int
+//			getIntInRange(scanner : Scanner, min : int, max : int) : int
+
 package utility;
 
 import java.util.Scanner;
+
 
 public class InputHelper 
 {
@@ -39,7 +49,8 @@ public class InputHelper
 			}
 		}
 	}
-	//Overloaded version of above, allowing for a prompt to be passed in and making it look better
+	
+	//Overloaded version of method above, allowing for a prompt to be passed in and making it look better
 	public static int getInt(Scanner scanner, String prompt)
 	{
 		while(true)
@@ -54,37 +65,6 @@ public class InputHelper
 			}
 		}
 	}
-	
-//	//Parses the input to make sure a legal double is submitted from String
-//	public static double getDoubleFromString(String input)
-//	{
-//		while(true)
-//		{
-//			try
-//			{
-//				return Double.parseDouble(input);
-//			} catch(Exception e)
-//			{
-//				System.out.println("\nInvalid input. Please enter a decimal number.");
-//			
-//			}
-//		}
-//	}
-//	public static double getDouble(Scanner scanner, String prompt)
-//	{
-//		while(true)
-//		{
-//			System.out.print(prompt);
-//			try
-//			{
-//				return Double.parseDouble(scanner.nextLine());
-//			} catch(Exception e)
-//			{
-//				System.out.println("\nInvalid input. Please enter a decimal number.");
-//			
-//			}
-//		}
-//	}
 	
 	//Prompts the user for an integer in the appropriate range
 	public static int getIntInRange(Scanner scanner, int min, int max)
@@ -102,3 +82,5 @@ public class InputHelper
 		}
 	}
 }
+
+//"Looking for a donkey on its very back" - Chinese Proverb (translated)

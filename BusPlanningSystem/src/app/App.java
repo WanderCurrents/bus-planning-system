@@ -1,3 +1,12 @@
+//      App class
+//----------------------
+//Description: class that is the "main" class, entry point for program
+//Attributes: n/a
+//Methods:	main(args : String[]) : void
+//			loginProcess(um : UserManager, scanner : Scanner) : boolean
+//			mainMenu(um : UserManager, sm : StationManager, bs : BusManager, scanner : Scanner) : boolean
+//			addUserProcess(um : UserManager, scanner : Scanner) : void
+
 package app;
 
 import xml.UserManager;
@@ -13,7 +22,6 @@ import utility.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 
 
 public class App 
@@ -60,7 +68,7 @@ public class App
 	}
 	
 	
-	//Is the login process, called by the main method once every time the system is run
+	//Method for login process
 	public static boolean loginProcess(UserManager um,  Scanner scanner)
 	{
 		DisplayManager.clearScreen();
