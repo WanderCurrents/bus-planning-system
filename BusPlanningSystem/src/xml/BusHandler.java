@@ -1,3 +1,11 @@
+//  BusHandler Class
+//----------------------
+//Description: class designed for handling XML low-level operations for Buses and the buses.xml file. Extends XMLHandler class. Interacts with the BusManager when needed.
+//Attributes: n/a
+//Methods:	BusHandler()
+//			addBusXML(idIndex : int, inMakeModel : String, inType : String, inFuelType : FuelType, inFuelSize : int, inFuelBurn : int, inCruiseSpeed : int) : void
+//			removeBusXML(targetID : int) : boolean
+
 package xml;
 
 import model.FuelType;
@@ -5,13 +13,16 @@ import model.FuelType;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+
 public class BusHandler extends XMLHandler
 {
+	//Constructor
 	public BusHandler() throws Exception
 	{
-		super("resources/buses.xml");
+		super("resources/buses.xml");	//Sets the correct file path from the XMLHandler constructor
 	}
 	
+	//Method that adds a bus to the XML document/file
 	protected void addBusXML(int idIndex, String inMakeModel, String inType, FuelType inFuelType, int inFuelSize, int inFuelBurn, int inCruiseSpeed)
 	{
 		Element eNewBus = doc.createElement("bus");
@@ -37,11 +48,11 @@ public class BusHandler extends XMLHandler
 		eNewBus.appendChild(fuelburn);
 		eNewBus.appendChild(cruisespeed);
 		
-		
 		//Add the element to the document
 		doc.getDocumentElement().appendChild(eNewBus);
 	}
 	
+	//Method that removes a bus from the XML document/file
 	protected boolean removeBusXML(int targetID)
 	{
 		NodeList nodes = doc.getElementsByTagName("bus");	//Not creating a new NodeList, just a pointer
@@ -52,14 +63,11 @@ public class BusHandler extends XMLHandler
 			if(Integer.parseInt(bus.getAttribute("id")) == targetID)
 			{
 				doc.getDocumentElement().removeChild(bus);
-				return true;
+				return true;	//Return true if found and removed
 			}
 		}
-		
-		return false;
+		return false;	//Return false if not found
 	}
 }
 
-//TEST COMMENT
-
-
+//"But if I see one more cyber truck, I swear to God I'm gonna floor it." -Noah Kahan, 2026

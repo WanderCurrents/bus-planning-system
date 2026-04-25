@@ -1,13 +1,11 @@
-//Main class for XML file handling
-//---------------------------------------------------------------
-//Fields
-//	idIndex = the next available ID value, used for adding a new element
-//	doc = necessary in-memory version of the XML file that Java uses
-//	filePath = String field that has the file path for the XML file
-//Methods
-//	getIDIndex(list) = moreso establishes the next working ID index, not really a getter
-//	removeWhidespaceNodes(node) = fixes indent issue found in early testing
-//	saveXML() = saves the document to the XML file
+//  XMLHandler Class
+//----------------------
+//Description: superclass that deals with XML handling with the XML related libraries in Java. Generic enough for all XML uses in this program and is to be extended
+//Attributes:	doc : Document
+//				filePath : String
+//Methods:	XMLHandler(path : String)
+//			removeWhitespaceNodes(node : Node) : void
+//			saveXML() : void
 
 package xml;
 
@@ -24,22 +22,23 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import java.io.File;
 
+
 public class XMLHandler 
 {
 	
-	protected Document doc;
-	protected String filePath;
+	protected Document doc;		//In-memory version of XML file that Java uses
+	protected String filePath;	//The file path that points to the XML file
 	
+	//Basic constructor for the superclass
 	public XMLHandler(String path) throws Exception
 	{
 		filePath = path;
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		doc = builder.parse(new File(filePath));
-		
 	}
 	
-
+	//A bug was found early-on where whitespace would be added everywhere anytime an operation was done. This method was developed to prevent this
 	protected void removeWhitespaceNodes(Node node)
 	{
 		NodeList children = node.getChildNodes();  //Gets all children nodes
@@ -59,17 +58,17 @@ public class XMLHandler
 		}
 	}
 	
+	//Saves document to XML file
 	protected void saveXML() throws Exception
 	{
 		removeWhitespaceNodes(doc.getDocumentElement());
 		Transformer transformer = TransformerFactory.newInstance().newTransformer();
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");   //Indent fix
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");  //Indent amount for fix //TODO: Check if this is necessary or if we can manually add it
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");  //Indent amount for fix
 		DOMSource source = new DOMSource(doc);
-		StreamResult result = new StreamResult(new File(filePath));   //TODO: make sure the filePath solution actually works
+		StreamResult result = new StreamResult(new File(filePath));
 		transformer.transform(source, result);
 	}
-	
-	
-	
 }
+
+//"You only get to die for having lived. Most people who could ever exist, will never even be born." -Neil deGrasse Tyson

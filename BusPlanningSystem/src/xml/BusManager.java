@@ -1,3 +1,20 @@
+//  BusManager Class
+//----------------------
+//Description: class designed for managing middle-level operations between the application classes and low-level operations of the XML handling. Maintains the active list of buses.
+//Attributes:	handler : BusHandler
+//				idIndex : int
+//				list : List<Bus>
+//Methods:	BusManager()
+//			getIDIndex() : int
+//			convertElementToBus(e : Element) : Bus
+//			addBus(inMakeModel : String, inType : String, inFuelType : FuelType, inFuelSize : int, inFuelBurn : int, inCruiseSpeed : int) : void
+//			addBus(inID : int, inMakeModel : String, inType : String, inFuelType : FuelType, inFuelSize : int, inFuelBurn : int, inCruiseSpeed : int) : void
+//			removeBus(targetID : int) : boolean
+//			findBus(busMakeModel : String) : int
+//			getBus(targetID : int) : Bus
+////		printBusList() : void
+//			subStringSearch(substring : String) : List<Bus>
+
 package xml;
 
 import model.Bus;
@@ -10,15 +27,17 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+
 public class BusManager 
 {
-	private BusHandler handler;
-	protected int idIndex;
-	protected List<Bus> list = new ArrayList<>();
+	private BusHandler handler;						//Respective handler
+	protected int idIndex;							//Next available ID
+	protected List<Bus> list = new ArrayList<>();	//Maintained list of Buses managed by the manager
 	
+	//Main constructor, creates the respective handler and sets in motion the XML database setup when a manager is created
 	public BusManager() throws Exception
 	{
-		handler = new BusHandler();
+		handler = new BusHandler();	//Create the handler
 		
 		//Establish the list
 		NodeList nodeBList = handler.doc.getElementsByTagName("bus");
@@ -28,9 +47,10 @@ public class BusManager
 			list.add(convertElementToBus(e));
 		}
 		
-		idIndex = getIDIndex();
+		idIndex = getIDIndex();	//Set the ID index
 	}
 	
+	//Finds the next available ID index and sets it
 	protected int getIDIndex()
 	{
 		int maxID = -1;
@@ -45,6 +65,7 @@ public class BusManager
 		return maxID+1;	//Returns the next available ID value that can be used
 	}
 	
+	//Converts DOM information into a Bus object
 	private Bus convertElementToBus(Element e)
 	{
 		int id = Integer.parseInt(e.getAttribute("id"));
@@ -58,7 +79,7 @@ public class BusManager
 		return new Bus(id, makeModel, type, fuelType, fuelSize, fuelBurn, cruiseSpeed);
 	}
 	
-	
+	//Primary method for creating a bus
 	public void addBus(String inMakeModel, String inType, FuelType inFuelType, int inFuelSize, int inFuelBurn, int inCruiseSpeed) throws Exception
 	{
 		//Create the new bus addition
@@ -76,7 +97,7 @@ public class BusManager
 		idIndex++;	//Update the index counter
 	}
 	
-	//Overloaded method for creating Users, passed in ID, no need to update ID, meant for user modification
+	//Overloaded alternative method for creating Bus, passed in ID, no need to update ID, meant for bus modification
 	public void addBus(int inID, String inMakeModel, String inType, FuelType inFuelType, int inFuelSize, int inFuelBurn, int inCruiseSpeed) throws Exception
 	{
 		//Create the new bus addition
@@ -94,6 +115,7 @@ public class BusManager
 		//DO NOT UPDATE ID, NO NEED
 	}
 	
+	//Primary method for removing a bus
 	public boolean removeBus(int targetID) throws Exception
 	{
 		for(int i=0; i<list.size(); i++)
@@ -103,13 +125,13 @@ public class BusManager
 				list.remove(i);		//Remove from the working list
 				handler.removeBusXML(targetID);	//Remove from XML DOM
 				handler.saveXML(); 	//Save XML to file
-				return true;
+				return true;	//Return true if bus was found and removed
 			}
 		}
-		return false;
+		return false;	//Return false if the bus was not found
 	}
 	
-	//Returns the busID for a bus based on make and model name, not case sensitive
+	//Returns the busID for a bus based on make and model name, not case sensitive, this method is called in the adding/modifying process to make sure there are no duplicates
 	public int findBus(String busMakeModel)
 	{
 		for(Bus b : list)
@@ -119,9 +141,10 @@ public class BusManager
 				return b.getID();
 			}
 		}
-		return -99;	//Just a number to signal station not found
+		return -99;	//Just a number to signal bus not found
 	}
 	
+	//Returns a bus object based on the targetID
 	public Bus getBus(int targetID)
 	{
 		for(Bus b : list)
@@ -134,17 +157,18 @@ public class BusManager
 		return null;
 	}
 	
-	public void printBusList()
-	{
-		for(Bus b : list)
-		{
-			System.out.println("ID: " + b.getID() + "\n\tMake & Model: " + b.getMakeModel() + "\n\tType: " + b.getType() 
-					+ "\n\tFuel Type: " + b.getFuelTypeDisplay() + "\n\tFuel Size: " + b.getFuelSize() 
-					+ "\n\tFuel Burn: " + b.getFuelBurn() + "\n\tCruise Speed: " + b.getCruiseSpeed());
-		}
-	}
+	//Debug method for printing the list of buses
+//	public void printBusList()
+//	{
+//		for(Bus b : list)
+//		{
+//			System.out.println("ID: " + b.getID() + "\n\tMake & Model: " + b.getMakeModel() + "\n\tType: " + b.getType() 
+//					+ "\n\tFuel Type: " + b.getFuelTypeDisplay() + "\n\tFuel Size: " + b.getFuelSize() 
+//					+ "\n\tFuel Burn: " + b.getFuelBurn() + "\n\tCruise Speed: " + b.getCruiseSpeed());
+//		}
+//	}
 	
-	//SubString Search
+	//Method for substring search and returns a list of matches
 	public List<Bus> subStringSearch(String substring)
 	{
 		List<Bus> matches = new ArrayList<>();
@@ -152,7 +176,9 @@ public class BusManager
 		for (Bus b : list)
 		{
 			if (b.getMakeModel().toLowerCase().contains(lower))
+			{
 				matches.add(b);
+			}
 		}
 		return matches;
 	}

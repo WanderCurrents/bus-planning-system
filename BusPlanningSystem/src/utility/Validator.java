@@ -1,4 +1,4 @@
-//  InputHelper Class
+//  Validator Class
 //----------------------
 //Description: class that holds the methods that help make sure user inputs follow logic rules that we have in place rather than make sure that the inputs are legal (e.g. InputHelper)
 //Attributes: n/a
@@ -178,6 +178,8 @@ public class Validator
 		
 		return true;	//Password passes, return true
 	}
+	
+	//"And Icarus laughed as he fell, for he knew to fall means to once have soared" -Unknown
 	
 	//Checks if station name is valid. Must be size < 50 and > 4 characters long and contain only alphanumeric characters and spaces, and must not already exist
 	public static boolean isValidStationName(StationManager sm, String newName)

@@ -1,3 +1,11 @@
+//  StationHandler Class
+//----------------------
+//Description: class designed for handling XML low-level operations for Stations and the stations.xml file. Extends XMLHandler class. Interacts with the StationManager when needed.
+//Attributes: n/a
+//Methods:	StationHandler()
+//			addStationXML(idIndex : int, inName : String, inLat : double, inLong : double, inFuelType : EnumSet<FuelType>, inIsFuelOnly : boolean) : void
+//			removeStationXML(targetID : int) : boolean
+
 package xml;
 
 import model.FuelType;
@@ -7,13 +15,16 @@ import java.util.stream.Collectors;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+
 public class StationHandler extends XMLHandler 
 {
+	//Constructor
 	public StationHandler() throws Exception
 	{
-		super("resources/stations.xml");
+		super("resources/stations.xml");	//Sets the correct file path from the XMLHandler constructor
 	}
 	
+	//Method that adds a station to the XML document/file
 	protected void addStationXML(int idIndex, String inName, double inLat, double inLong, EnumSet<FuelType> inFuelType, boolean inIsFuelOnly)
 	{
 		Element eNewStation = doc.createElement("station");
@@ -45,6 +56,7 @@ public class StationHandler extends XMLHandler
 		doc.getDocumentElement().appendChild(eNewStation);
 	}
 	
+	//Method that removes a station from the XML document/file
 	protected boolean removeStationXML(int targetID)
 	{
 		NodeList nodes = doc.getElementsByTagName("station");	//Not creating a new NodeList, just a pointer
@@ -55,10 +67,9 @@ public class StationHandler extends XMLHandler
 			if(Integer.parseInt(station.getAttribute("id")) == targetID)
 			{
 				doc.getDocumentElement().removeChild(station);
-				return true;
+				return true;	//Return true if found and removed
 			}
 		}
-		
-		return false;
+		return false;	//Return false if not found
 	}
 }

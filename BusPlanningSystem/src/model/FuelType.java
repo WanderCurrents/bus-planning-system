@@ -1,4 +1,4 @@
-//      Bus Class
+// FuelType Enum Class
 //----------------------
 //Description: enum class for working with fuel types,
 //Current Enums:	GAS, DIESEL
